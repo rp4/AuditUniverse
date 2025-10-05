@@ -1,0 +1,74 @@
+/**
+ * AuditVerse Design Tokens
+ *
+ * Color Palette:
+ * - Background: #0c0c1a (dark blue-black)
+ * - Primary: #00ffcc (cyan)
+ * - Accent: #ff6600 (orange)
+ * - Success: #00ff99 (green)
+ * - Warning: #ffcc00 (yellow)
+ * - Danger: #ff0044 (red)
+ *
+ * Visual Encoding:
+ * - Likelihood: Blue (#0044ff) → Yellow (#ffcc00) → Red (#ff0044)
+ * - Severity: Size (3px → 13px)
+ * - Confidence: Opacity (0.3 → 1.0)
+ * - Entity Type: Shape (Sphere, Cube, Octahedron, etc.)
+ */
+
+:root {
+  /* Colors */
+  --av-background: #0c0c1a;
+  --av-primary: #00ffcc;
+  --av-accent: #ff6600;
+  --av-success: #00ff99;
+  --av-warning: #ffcc00;
+  --av-danger: #ff0044;
+  --av-purple: #9966ff;
+  --av-pink: #ff0099;
+
+  /* Panel colors */
+  --av-panel-dark: #1a1a2e;
+  --av-panel-medium: #2a2a2f;
+  --av-border: #4a4a4f;
+
+  /* Entity colors (for legend and UI) */
+  --av-risk: #ff0044;
+  --av-control: #00ccff;
+  --av-audit: #ff6600;
+  --av-issue: #ffff00;
+  --av-incident: #ff0099;
+  --av-standard: #9966ff;
+  --av-business-unit: #00ff99;
+
+  /* Spacing */
+  --av-spacing-xs: 0.25rem;
+  --av-spacing-sm: 0.5rem;
+  --av-spacing-md: 1rem;
+  --av-spacing-lg: 1.5rem;
+  --av-spacing-xl: 2rem;
+
+  /* Border radius */
+  --av-radius-sm: 0.25rem;
+  --av-radius-md: 0.5rem;
+  --av-radius-lg: 0.75rem;
+
+  /* Shadows */
+  --av-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --av-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --av-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+  --av-shadow-glow-cyan: 0 0 20px rgba(0, 255, 204, 0.3);
+  --av-shadow-glow-orange: 0 0 20px rgba(255, 102, 0, 0.3);
+
+  /* Transitions */
+  --av-transition-fast: 150ms ease-in-out;
+  --av-transition-normal: 300ms ease-in-out;
+  --av-transition-slow: 500ms ease-in-out;
+
+  /* Z-index layers */
+  --av-z-base: 0;
+  --av-z-dropdown: 1000;
+  --av-z-modal: 2000;
+  --av-z-tooltip: 3000;
+  --av-z-top: 9999;
+}

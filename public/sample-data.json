@@ -1,0 +1,664 @@
+{
+  "risks": [
+    {
+      "id": "R001",
+      "name": "Data Breach Risk",
+      "type": "risk",
+      "inherent_likelihood": 8,
+      "inherent_severity": 9,
+      "inherent_rating": 8.5,
+      "residual_likelihood": 4,
+      "residual_severity": 7,
+      "residual_rating": 5.5,
+      "category": "Cybersecurity",
+      "owner": "CISO",
+      "business_unit": "IT",
+      "last_assessment": "2024-03-15",
+      "description": "Risk of unauthorized access to customer personally identifiable information (PII)"
+    },
+    {
+      "id": "R002",
+      "name": "Regulatory Compliance Risk",
+      "type": "risk",
+      "inherent_likelihood": 6,
+      "inherent_severity": 8,
+      "inherent_rating": 7.0,
+      "residual_likelihood": 3,
+      "residual_severity": 6,
+      "residual_rating": 4.5,
+      "category": "Compliance",
+      "owner": "Compliance Officer",
+      "business_unit": "Legal",
+      "last_assessment": "2024-02-20"
+    },
+    {
+      "id": "R003",
+      "name": "Third-Party Vendor Risk",
+      "type": "risk",
+      "inherent_likelihood": 7,
+      "inherent_severity": 6,
+      "inherent_rating": 6.5,
+      "residual_likelihood": 5,
+      "residual_severity": 5,
+      "residual_rating": 5.0,
+      "category": "Operational",
+      "owner": "Procurement Manager",
+      "business_unit": "Operations"
+    },
+    {
+      "id": "R004",
+      "name": "Payment Processing Fraud",
+      "type": "risk",
+      "inherent_likelihood": 9,
+      "inherent_severity": 8,
+      "inherent_rating": 8.5,
+      "residual_likelihood": 3,
+      "residual_severity": 6,
+      "residual_rating": 4.5,
+      "category": "Financial",
+      "owner": "CFO",
+      "business_unit": "Finance",
+      "last_assessment": "2024-01-10"
+    },
+    {
+      "id": "R005",
+      "name": "System Downtime Risk",
+      "type": "risk",
+      "inherent_likelihood": 5,
+      "inherent_severity": 7,
+      "inherent_rating": 6.0,
+      "residual_likelihood": 2,
+      "residual_severity": 5,
+      "residual_rating": 3.5,
+      "category": "Technology",
+      "owner": "CTO",
+      "business_unit": "IT"
+    },
+    {
+      "id": "R006",
+      "name": "Insider Threat",
+      "type": "risk",
+      "inherent_likelihood": 4,
+      "inherent_severity": 9,
+      "inherent_rating": 6.5,
+      "residual_likelihood": 2,
+      "residual_severity": 7,
+      "residual_rating": 4.5,
+      "category": "Security",
+      "owner": "CISO",
+      "business_unit": "HR",
+      "last_assessment": "2023-12-01"
+    },
+    {
+      "id": "R007",
+      "name": "API Security Vulnerability",
+      "type": "risk",
+      "inherent_likelihood": 7,
+      "inherent_severity": 8,
+      "inherent_rating": 7.5,
+      "residual_likelihood": 4,
+      "residual_severity": 6,
+      "residual_rating": 5.0,
+      "category": "Cybersecurity",
+      "owner": "Engineering Lead",
+      "business_unit": "IT"
+    },
+    {
+      "id": "R008",
+      "name": "Supply Chain Disruption",
+      "type": "risk",
+      "inherent_likelihood": 6,
+      "inherent_severity": 7,
+      "inherent_rating": 6.5,
+      "residual_likelihood": 4,
+      "residual_severity": 6,
+      "residual_rating": 5.0,
+      "category": "Operational",
+      "owner": "COO",
+      "business_unit": "Operations"
+    },
+    {
+      "id": "R009",
+      "name": "Intellectual Property Theft",
+      "type": "risk",
+      "inherent_likelihood": 5,
+      "inherent_severity": 10,
+      "inherent_rating": 7.5,
+      "residual_likelihood": 3,
+      "residual_severity": 8,
+      "residual_rating": 5.5,
+      "category": "Security",
+      "owner": "Legal Counsel",
+      "business_unit": "Legal"
+    },
+    {
+      "id": "R010",
+      "name": "Cloud Infrastructure Failure",
+      "type": "risk",
+      "inherent_likelihood": 3,
+      "inherent_severity": 9,
+      "inherent_rating": 6.0,
+      "residual_likelihood": 2,
+      "residual_severity": 7,
+      "residual_rating": 4.5,
+      "category": "Technology",
+      "owner": "Cloud Architect",
+      "business_unit": "IT"
+    },
+    {
+      "id": "R011",
+      "name": "Employee Data Privacy Breach",
+      "type": "risk",
+      "inherent_likelihood": 4,
+      "inherent_severity": 7,
+      "inherent_rating": 5.5,
+      "residual_likelihood": 2,
+      "residual_severity": 5,
+      "residual_rating": 3.5,
+      "category": "Privacy",
+      "owner": "HR Director",
+      "business_unit": "HR"
+    },
+    {
+      "id": "R012",
+      "name": "Money Laundering Risk",
+      "type": "risk",
+      "inherent_likelihood": 3,
+      "inherent_severity": 10,
+      "inherent_rating": 6.5,
+      "residual_likelihood": 1,
+      "residual_severity": 8,
+      "residual_rating": 4.5,
+      "category": "Financial Crime",
+      "owner": "Compliance Officer",
+      "business_unit": "Finance",
+      "last_assessment": "2024-03-01"
+    },
+    {
+      "id": "R013",
+      "name": "Ransomware Attack",
+      "type": "risk",
+      "inherent_likelihood": 8,
+      "inherent_severity": 9,
+      "inherent_rating": 8.5,
+      "residual_likelihood": 3,
+      "residual_severity": 7,
+      "residual_rating": 5.0,
+      "category": "Cybersecurity",
+      "owner": "CISO",
+      "business_unit": "IT"
+    },
+    {
+      "id": "R014",
+      "name": "Phishing and Social Engineering",
+      "type": "risk",
+      "inherent_likelihood": 9,
+      "inherent_severity": 6,
+      "inherent_rating": 7.5,
+      "residual_likelihood": 5,
+      "residual_severity": 5,
+      "residual_rating": 5.0,
+      "category": "Cybersecurity",
+      "owner": "Security Awareness Lead",
+      "business_unit": "IT"
+    },
+    {
+      "id": "R015",
+      "name": "Database Access Control Weakness",
+      "type": "risk",
+      "inherent_likelihood": 6,
+      "inherent_severity": 8,
+      "inherent_rating": 7.0,
+      "residual_likelihood": 3,
+      "residual_severity": 6,
+      "residual_rating": 4.5,
+      "category": "Data Security",
+      "owner": "Database Administrator",
+      "business_unit": "IT"
+    },
+    {
+      "id": "R016",
+      "name": "Business Continuity Plan Inadequacy",
+      "type": "risk",
+      "inherent_likelihood": 4,
+      "inherent_severity": 8,
+      "inherent_rating": 6.0,
+      "residual_likelihood": 2,
+      "residual_severity": 6,
+      "residual_rating": 4.0,
+      "category": "Business Continuity",
+      "owner": "Risk Manager",
+      "business_unit": "Operations"
+    },
+    {
+      "id": "R017",
+      "name": "Customer Data Retention Non-Compliance",
+      "type": "risk",
+      "inherent_likelihood": 5,
+      "inherent_severity": 6,
+      "inherent_rating": 5.5,
+      "residual_likelihood": 2,
+      "residual_severity": 4,
+      "residual_rating": 3.0,
+      "category": "Compliance",
+      "owner": "Data Protection Officer",
+      "business_unit": "Legal"
+    },
+    {
+      "id": "R018",
+      "name": "Software Development Security Gap",
+      "type": "risk",
+      "inherent_likelihood": 7,
+      "inherent_severity": 7,
+      "inherent_rating": 7.0,
+      "residual_likelihood": 4,
+      "residual_severity": 5,
+      "residual_rating": 4.5,
+      "category": "Application Security",
+      "owner": "Development Manager",
+      "business_unit": "Engineering"
+    },
+    {
+      "id": "R019",
+      "name": "Email Security Risk",
+      "type": "risk",
+      "inherent_likelihood": 8,
+      "inherent_severity": 5,
+      "inherent_rating": 6.5,
+      "residual_likelihood": 4,
+      "residual_severity": 4,
+      "residual_rating": 4.0,
+      "category": "Cybersecurity",
+      "owner": "IT Security Manager",
+      "business_unit": "IT"
+    },
+    {
+      "id": "R020",
+      "name": "Mobile Device Management Risk",
+      "type": "risk",
+      "inherent_likelihood": 6,
+      "inherent_severity": 6,
+      "inherent_rating": 6.0,
+      "residual_likelihood": 3,
+      "residual_severity": 4,
+      "residual_rating": 3.5,
+      "category": "Endpoint Security",
+      "owner": "IT Manager",
+      "business_unit": "IT"
+    }
+  ],
+  "controls": [
+    {
+      "id": "C001",
+      "name": "Multi-Factor Authentication",
+      "type": "control",
+      "effectiveness": 0.85,
+      "owner": "IT Security",
+      "description": "MFA required for all system access"
+    },
+    {
+      "id": "C002",
+      "name": "Data Encryption at Rest",
+      "type": "control",
+      "effectiveness": 0.90,
+      "owner": "IT Security",
+      "description": "AES-256 encryption for all stored data"
+    },
+    {
+      "id": "C003",
+      "name": "Network Segmentation",
+      "type": "control",
+      "effectiveness": 0.80,
+      "owner": "Network Team"
+    },
+    {
+      "id": "C004",
+      "name": "Fraud Detection System",
+      "type": "control",
+      "effectiveness": 0.75,
+      "owner": "Finance",
+      "description": "Real-time transaction monitoring"
+    },
+    {
+      "id": "C005",
+      "name": "Backup and Recovery System",
+      "type": "control",
+      "effectiveness": 0.88,
+      "owner": "IT Operations"
+    },
+    {
+      "id": "C006",
+      "name": "Background Check Process",
+      "type": "control",
+      "effectiveness": 0.70,
+      "owner": "HR"
+    },
+    {
+      "id": "C007",
+      "name": "API Gateway Security",
+      "type": "control",
+      "effectiveness": 0.82,
+      "owner": "Engineering"
+    },
+    {
+      "id": "C008",
+      "name": "Vendor Risk Assessment",
+      "type": "control",
+      "effectiveness": 0.65,
+      "owner": "Procurement"
+    },
+    {
+      "id": "C009",
+      "name": "DLP (Data Loss Prevention)",
+      "type": "control",
+      "effectiveness": 0.78,
+      "owner": "IT Security"
+    },
+    {
+      "id": "C010",
+      "name": "High Availability Architecture",
+      "type": "control",
+      "effectiveness": 0.92,
+      "owner": "Cloud Team"
+    },
+    {
+      "id": "C011",
+      "name": "Employee Privacy Training",
+      "type": "control",
+      "effectiveness": 0.60,
+      "owner": "HR"
+    },
+    {
+      "id": "C012",
+      "name": "AML Transaction Monitoring",
+      "type": "control",
+      "effectiveness": 0.87,
+      "owner": "Compliance"
+    },
+    {
+      "id": "C013",
+      "name": "Endpoint Detection and Response",
+      "type": "control",
+      "effectiveness": 0.84,
+      "owner": "IT Security"
+    },
+    {
+      "id": "C014",
+      "name": "Security Awareness Training",
+      "type": "control",
+      "effectiveness": 0.72,
+      "owner": "IT Security"
+    },
+    {
+      "id": "C015",
+      "name": "Database Access Controls",
+      "type": "control",
+      "effectiveness": 0.79,
+      "owner": "Database Team"
+    }
+  ],
+  "audits": [
+    {
+      "id": "A001",
+      "name": "Q1 2024 Cybersecurity Audit",
+      "type": "audit",
+      "date": "2024-01-15",
+      "status": "completed",
+      "owner": "Internal Audit"
+    },
+    {
+      "id": "A002",
+      "name": "SOX Compliance Review",
+      "type": "audit",
+      "date": "2024-02-01",
+      "status": "completed",
+      "owner": "External Auditors"
+    },
+    {
+      "id": "A003",
+      "name": "GDPR Compliance Assessment",
+      "type": "audit",
+      "date": "2024-02-20",
+      "status": "completed",
+      "owner": "Privacy Team"
+    },
+    {
+      "id": "A004",
+      "name": "Payment Security Audit",
+      "type": "audit",
+      "date": "2024-01-10",
+      "status": "completed",
+      "owner": "Internal Audit"
+    },
+    {
+      "id": "A005",
+      "name": "IT Infrastructure Review",
+      "type": "audit",
+      "date": "2024-03-15",
+      "status": "in_progress",
+      "owner": "Internal Audit"
+    },
+    {
+      "id": "A006",
+      "name": "Third-Party Risk Assessment",
+      "type": "audit",
+      "date": "2024-04-01",
+      "status": "planned",
+      "owner": "Risk Team"
+    }
+  ],
+  "issues": [
+    {
+      "id": "I001",
+      "name": "Weak Password Policy",
+      "type": "issue",
+      "severity": "medium",
+      "status": "open",
+      "owner": "IT Security"
+    },
+    {
+      "id": "I002",
+      "name": "Outdated Backup Procedures",
+      "type": "issue",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "IT Operations"
+    }
+  ],
+  "incidents": [
+    {
+      "id": "IN001",
+      "name": "Phishing Email Campaign",
+      "type": "incident",
+      "date": "2024-02-15",
+      "impact": 3,
+      "owner": "Security Team"
+    }
+  ],
+  "standards": [
+    {
+      "id": "S001",
+      "name": "GDPR Article 32",
+      "type": "standard",
+      "framework": "GDPR",
+      "description": "Security of processing"
+    },
+    {
+      "id": "S002",
+      "name": "SOX Section 404",
+      "type": "standard",
+      "framework": "SOX",
+      "description": "Assessment of internal controls"
+    },
+    {
+      "id": "S003",
+      "name": "PCI-DSS Requirement 3",
+      "type": "standard",
+      "framework": "PCI-DSS",
+      "description": "Protect stored cardholder data"
+    },
+    {
+      "id": "S004",
+      "name": "ISO 27001 A.9.2",
+      "type": "standard",
+      "framework": "ISO 27001",
+      "description": "User access management"
+    }
+  ],
+  "businessUnits": [
+    {
+      "id": "BU001",
+      "name": "IT Department",
+      "type": "businessUnit",
+      "department": "Technology"
+    },
+    {
+      "id": "BU002",
+      "name": "Finance Department",
+      "type": "businessUnit",
+      "department": "Finance"
+    },
+    {
+      "id": "BU003",
+      "name": "Legal Department",
+      "type": "businessUnit",
+      "department": "Legal & Compliance"
+    },
+    {
+      "id": "BU004",
+      "name": "HR Department",
+      "type": "businessUnit",
+      "department": "Human Resources"
+    },
+    {
+      "id": "BU005",
+      "name": "Operations",
+      "type": "businessUnit",
+      "department": "Operations"
+    }
+  ],
+  "relationships": [
+    {"source": "C001", "target": "R001", "type": "mitigates", "strength": 0.8},
+    {"source": "C002", "target": "R001", "type": "mitigates", "strength": 0.9},
+    {"source": "C001", "target": "R006", "type": "mitigates", "strength": 0.7},
+    {"source": "C004", "target": "R004", "type": "mitigates", "strength": 0.75},
+    {"source": "C005", "target": "R005", "type": "mitigates", "strength": 0.88},
+    {"source": "C006", "target": "R006", "type": "mitigates", "strength": 0.7},
+    {"source": "C007", "target": "R007", "type": "mitigates", "strength": 0.82},
+    {"source": "C008", "target": "R003", "type": "mitigates", "strength": 0.65},
+    {"source": "C009", "target": "R009", "type": "mitigates", "strength": 0.78},
+    {"source": "C010", "target": "R010", "type": "mitigates", "strength": 0.92},
+    {"source": "C011", "target": "R011", "type": "mitigates", "strength": 0.6},
+    {"source": "C012", "target": "R012", "type": "mitigates", "strength": 0.87},
+    {"source": "C013", "target": "R013", "type": "mitigates", "strength": 0.84},
+    {"source": "C014", "target": "R014", "type": "mitigates", "strength": 0.72},
+    {"source": "C015", "target": "R015", "type": "mitigates", "strength": 0.79},
+    {"source": "C002", "target": "R015", "type": "mitigates", "strength": 0.85},
+    {"source": "C013", "target": "R019", "type": "mitigates", "strength": 0.75},
+    {"source": "C001", "target": "R020", "type": "mitigates", "strength": 0.7},
+
+    {"source": "A001", "target": "R001", "type": "assessed_by"},
+    {"source": "A001", "target": "R007", "type": "assessed_by"},
+    {"source": "A001", "target": "R013", "type": "assessed_by"},
+    {"source": "A002", "target": "R002", "type": "assessed_by"},
+    {"source": "A002", "target": "R004", "type": "assessed_by"},
+    {"source": "A003", "target": "R001", "type": "assessed_by"},
+    {"source": "A003", "target": "R002", "type": "assessed_by"},
+    {"source": "A003", "target": "R011", "type": "assessed_by"},
+    {"source": "A004", "target": "R004", "type": "assessed_by"},
+    {"source": "A004", "target": "R012", "type": "assessed_by"},
+    {"source": "A005", "target": "R005", "type": "assessed_by"},
+    {"source": "A005", "target": "R010", "type": "assessed_by"},
+
+    {"source": "BU001", "target": "R001", "type": "owned_by"},
+    {"source": "BU001", "target": "R005", "type": "owned_by"},
+    {"source": "BU001", "target": "R007", "type": "owned_by"},
+    {"source": "BU001", "target": "R010", "type": "owned_by"},
+    {"source": "BU001", "target": "R013", "type": "owned_by"},
+    {"source": "BU001", "target": "R014", "type": "owned_by"},
+    {"source": "BU001", "target": "R015", "type": "owned_by"},
+    {"source": "BU001", "target": "R019", "type": "owned_by"},
+    {"source": "BU001", "target": "R020", "type": "owned_by"},
+    {"source": "BU002", "target": "R004", "type": "owned_by"},
+    {"source": "BU002", "target": "R012", "type": "owned_by"},
+    {"source": "BU003", "target": "R002", "type": "owned_by"},
+    {"source": "BU003", "target": "R009", "type": "owned_by"},
+    {"source": "BU003", "target": "R017", "type": "owned_by"},
+    {"source": "BU004", "target": "R006", "type": "owned_by"},
+    {"source": "BU004", "target": "R011", "type": "owned_by"},
+    {"source": "BU005", "target": "R003", "type": "owned_by"},
+    {"source": "BU005", "target": "R008", "type": "owned_by"},
+    {"source": "BU005", "target": "R016", "type": "owned_by"},
+
+    {"source": "S001", "target": "R001", "type": "requires"},
+    {"source": "S001", "target": "R002", "type": "requires"},
+    {"source": "S002", "target": "R004", "type": "requires"},
+    {"source": "S003", "target": "R004", "type": "requires"},
+    {"source": "S004", "target": "R006", "type": "requires"},
+    {"source": "S004", "target": "R015", "type": "requires"},
+
+    {"source": "IN001", "target": "R014", "type": "causes"},
+
+    {"source": "I001", "target": "C001", "type": "reports"},
+    {"source": "I002", "target": "C005", "type": "reports"}
+  ],
+  "events": [
+    {
+      "date": "2024-01-10",
+      "type": "risk_assessment",
+      "entityId": "R004",
+      "description": "Updated risk assessment",
+      "changes": {
+        "residual_likelihood": 5,
+        "residual_severity": 6
+      }
+    },
+    {
+      "date": "2024-01-15",
+      "type": "risk_assessment",
+      "entityId": "R001",
+      "description": "Risk re-evaluation",
+      "changes": {
+        "residual_likelihood": 4,
+        "residual_severity": 7
+      }
+    },
+    {
+      "date": "2024-02-01",
+      "type": "control_added",
+      "entityId": "C_NEW_001",
+      "description": "New firewall control",
+      "relatedIds": ["R014"],
+      "changes": {
+        "effectiveness": 0.8
+      }
+    },
+    {
+      "date": "2024-02-15",
+      "type": "incident_occurred",
+      "entityId": "IN002",
+      "description": "Security breach incident",
+      "relatedIds": ["R014"]
+    },
+    {
+      "date": "2024-03-01",
+      "type": "risk_assessment",
+      "entityId": "R014",
+      "description": "Risk severity increased",
+      "changes": {
+        "residual_likelihood": 6,
+        "residual_severity": 6
+      }
+    },
+    {
+      "date": "2024-03-15",
+      "type": "risk_assessment",
+      "entityId": "R001",
+      "description": "Risk mitigated successfully",
+      "changes": {
+        "residual_likelihood": 3,
+        "residual_severity": 6
+      }
+    }
+  ]
+}

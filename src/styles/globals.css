@@ -1,0 +1,133 @@
+@import './theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-av-background text-white antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-av-panel-dark;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-av-border rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-av-primary/50;
+  }
+}
+
+@layer components {
+  /* Glassmorphism utility */
+  .glass {
+    @apply bg-black/80 backdrop-blur-sm border border-av-primary/30;
+  }
+
+  .glass-dark {
+    @apply bg-black/90 backdrop-blur-md border border-av-border;
+  }
+
+  .glass-panel {
+    @apply bg-black/80 backdrop-blur-sm;
+  }
+
+  /* Panel styles */
+  .panel {
+    @apply bg-gradient-to-br from-av-panel-medium to-av-panel-dark border-4 border-av-border;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply bg-av-primary text-black hover:bg-av-primary/90 transition-all hover:scale-105 shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-600 text-white hover:bg-gray-500 transition-all hover:scale-105;
+  }
+
+  /* Metric card */
+  .metric-card {
+    @apply p-4 rounded-lg border backdrop-blur-sm;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-block px-3 py-1 border rounded text-xs uppercase;
+  }
+}
+
+@layer utilities {
+  /* Shadow with glow */
+  .shadow-glow-cyan {
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  }
+
+  .shadow-glow-orange {
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.3);
+  }
+
+  /* Animation utilities */
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  /* Pulse animation for highlights */
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Slider thumb styling */
+  .slider-thumb::-webkit-slider-thumb {
+    @apply appearance-none w-4 h-4 rounded-full bg-av-primary cursor-pointer;
+  }
+
+  .slider-thumb::-moz-range-thumb {
+    @apply appearance-none w-4 h-4 rounded-full bg-av-primary cursor-pointer;
+  }
+}

@@ -15,14 +15,17 @@ import { LeftSidebar } from './components/panels/LeftSidebar';
 import { RightSidebar } from './components/panels/RightSidebar';
 import { Footer } from './components/panels/Footer';
 import { ExportModal } from './components/panels/ExportModal';
+import { WebGLError } from './components/shared/WebGLError';
 import { useFilters } from './hooks/useFilters';
 import { useTemporalFilter } from './hooks/useTemporalFilter';
 import { applyPresetView } from './lib/presetViews';
 import { getDateRange } from './lib/temporalFilter';
 import { useGraphStore } from './store/graphStore';
+import { detectWebGLSupport } from './utils/webglDetection';
 import type { Node, TemporalDataset } from './types';
 
 function App() {
+  const [webglError, setWebglError] = useState<string | null>(null);
   const [rawGraphData, setRawGraphData] = useState<TemporalDataset | null>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [hoveredNode, setHoveredNode] = useState<Node | null>(null);
@@ -31,6 +34,14 @@ function App() {
 
   const activePreset = useGraphStore(state => state.activePreset);
   const setDateRange = useGraphStore(state => state.setDateRange);
+
+  // Check WebGL support on mount
+  useEffect(() => {
+    const webgl = detectWebGLSupport();
+    if (!webgl.supported) {
+      setWebglError(webgl.message || 'WebGL is not available');
+    }
+  }, []);
 
   // Initialize timeline date range when data loads
   useEffect(() => {
@@ -82,6 +93,19 @@ function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedNode]);
+
+  // Cleanup timeline on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      const pause = useGraphStore.getState().pause;
+      pause();
+    };
+  }, []);
+
+  // Show WebGL error if not supported
+  if (webglError) {
+    return <WebGLError message={webglError} />;
+  }
 
   if (!rawGraphData) {
     return <WelcomeScreen onDataLoaded={setRawGraphData} />;

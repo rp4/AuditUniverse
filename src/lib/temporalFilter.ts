@@ -6,6 +6,7 @@
  */
 
 import type { GraphData, TemporalDataset, TemporalEvent } from '@/types';
+import { logger } from './logger';
 
 /**
  * Apply all events up to the target date
@@ -26,27 +27,43 @@ export function applyEventsUpTo(dataset: TemporalDataset, targetDate: Date): Gra
     .filter(event => new Date(event.date) <= targetDate)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  // Process each event
+  // Process each event with error recovery
   relevantEvents.forEach(event => {
-    switch (event.type) {
-      case 'risk_assessment':
-        handleRiskAssessment(event, nodeMap);
-        break;
-      case 'audit_completed':
-        handleAuditCompleted(event, nodes, links);
-        break;
-      case 'control_added':
-        handleControlAdded(event, nodes, links);
-        break;
-      case 'control_removed':
-        handleControlRemoved(event, nodes, links);
-        break;
-      case 'incident_occurred':
-        handleIncidentOccurred(event, nodes, links);
-        break;
-      case 'risk_mitigated':
-        handleRiskMitigated(event, nodes);
-        break;
+    try {
+      switch (event.type) {
+        case 'risk_assessment':
+          handleRiskAssessment(event, nodeMap);
+          break;
+        case 'audit_completed':
+          handleAuditCompleted(event, nodes, links);
+          break;
+        case 'control_added':
+          handleControlAdded(event, nodes, links);
+          break;
+        case 'control_removed':
+          handleControlRemoved(event, nodes, links);
+          break;
+        case 'incident_occurred':
+          handleIncidentOccurred(event, nodes, links);
+          break;
+        case 'risk_mitigated':
+          handleRiskMitigated(event, nodes);
+          break;
+        default:
+          logger.warn('Unknown event type encountered', {
+            component: 'temporalFilter',
+            eventType: event.type,
+            eventId: event.entityId,
+          });
+      }
+    } catch (error) {
+      logger.error('Failed to process temporal event', error as Error, {
+        component: 'temporalFilter',
+        eventType: event.type,
+        eventId: event.entityId,
+        eventDate: event.date,
+      });
+      // Continue processing other events
     }
   });
 
@@ -144,8 +161,27 @@ function handleControlRemoved(event: TemporalEvent, nodes: any[], links: any[]) 
   // Remove all links involving this control
   for (let i = links.length - 1; i >= 0; i--) {
     const link = links[i];
-    const sourceId = typeof link.source === 'string' ? link.source : link.source.id;
-    const targetId = typeof link.target === 'string' ? link.target : link.target.id;
+
+    // Validate link structure
+    if (!link || !link.source || !link.target) {
+      logger.warn('Malformed link encountered during control removal', {
+        component: 'temporalFilter',
+        linkIndex: i,
+        eventId: event.entityId,
+      });
+      continue;
+    }
+
+    const sourceId = typeof link.source === 'string' ? link.source : link.source?.id;
+    const targetId = typeof link.target === 'string' ? link.target : link.target?.id;
+
+    if (!sourceId || !targetId) {
+      logger.warn('Link with missing IDs', {
+        component: 'temporalFilter',
+        linkIndex: i,
+      });
+      continue;
+    }
 
     if (sourceId === event.entityId || targetId === event.entityId) {
       links.splice(i, 1);

@@ -15,6 +15,7 @@
 
 import { useMemo } from 'react';
 import { useGraphStore } from '@/store/graphStore';
+import { logger } from '@/lib/logger';
 import type { GraphData } from '@/types';
 
 export function useFilters(rawData: GraphData): GraphData {
@@ -50,8 +51,24 @@ export function useFilters(rawData: GraphData): GraphData {
       const auditedRiskIds = new Set<string>();
 
       links.forEach(link => {
-        const sourceId = typeof link.source === 'string' ? link.source : (link.source as any).id;
-        const targetId = typeof link.target === 'string' ? link.target : (link.target as any).id;
+        // Validate link structure
+        if (!link || !link.source || !link.target) {
+          logger.warn('Malformed link in audit filter', {
+            component: 'useFilters',
+            link,
+          });
+          return;
+        }
+
+        const sourceId = typeof link.source === 'string' ? link.source : (link.source as any)?.id;
+        const targetId = typeof link.target === 'string' ? link.target : (link.target as any)?.id;
+
+        if (!sourceId || !targetId) {
+          logger.warn('Link with missing IDs in audit filter', {
+            component: 'useFilters',
+          });
+          return;
+        }
 
         if (link.type === 'assessed_by') {
           // audit → risk
@@ -172,8 +189,17 @@ export function useFilters(rawData: GraphData): GraphData {
     // 8. Filter links to only connect visible nodes
     const visibleNodeIds = new Set(nodes.map(n => n.id));
     links = links.filter(link => {
-      const sourceId = typeof link.source === 'string' ? link.source : (link.source as any).id;
-      const targetId = typeof link.target === 'string' ? link.target : (link.target as any).id;
+      if (!link || !link.source || !link.target) {
+        return false;
+      }
+
+      const sourceId = typeof link.source === 'string' ? link.source : (link.source as any)?.id;
+      const targetId = typeof link.target === 'string' ? link.target : (link.target as any)?.id;
+
+      if (!sourceId || !targetId) {
+        return false;
+      }
+
       return visibleNodeIds.has(sourceId) && visibleNodeIds.has(targetId);
     });
 

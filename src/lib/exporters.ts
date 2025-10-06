@@ -15,20 +15,37 @@ export function exportJSON(data: GraphData, filename = 'audit-graph.json') {
 }
 
 /**
+ * Helper: Escape CSV special characters
+ */
+function escapeCSV(value: string): string {
+  // Convert to string and escape quotes by doubling them
+  const str = String(value);
+  const escaped = str.replace(/"/g, '""');
+
+  // Always quote fields containing commas, quotes, or newlines
+  if (escaped.includes(',') || escaped.includes('"') || escaped.includes('\n') || escaped.includes('\r')) {
+    return `"${escaped}"`;
+  }
+
+  // Quote the field anyway for consistency
+  return `"${escaped}"`;
+}
+
+/**
  * Export nodes as CSV
  */
 export function exportCSV(data: GraphData, filename = 'audit-nodes.csv') {
   const headers = ['ID', 'Type', 'Name', 'Description'];
   const rows = data.nodes.map(node => [
-    node.id,
-    node.type,
-    node.name,
-    node.description || ''
+    escapeCSV(node.id),
+    escapeCSV(node.type),
+    escapeCSV(node.name),
+    escapeCSV(node.description || '')
   ]);
 
   const csv = [
     headers.join(','),
-    ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ...rows.map(row => row.join(','))
   ].join('\n');
 
   downloadFile(csv, filename, 'text/csv');

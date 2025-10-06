@@ -9,6 +9,7 @@
  */
 
 import type { StateCreator } from 'zustand';
+import { logger } from '../../lib/logger';
 
 export interface TimelineSlice {
   // Current timeline position
@@ -90,7 +91,12 @@ export const createTimelineSlice: StateCreator<TimelineSlice> = (set, get) => ({
 
   // Start playback
   play: () => {
-    const { isPlaying, speed } = get();
+    const { isPlaying, speed, playbackIntervalId } = get();
+
+    // Clear any existing interval first to prevent leaks
+    if (playbackIntervalId !== null) {
+      window.clearInterval(playbackIntervalId);
+    }
 
     // Don't start if already playing
     if (isPlaying) return;
@@ -100,9 +106,17 @@ export const createTimelineSlice: StateCreator<TimelineSlice> = (set, get) => ({
     const baseInterval = 1000;
     const interval = baseInterval / speed;
 
-    // Start interval
+    // Start interval with error handling
     const id = window.setInterval(() => {
-      get().advanceDate();
+      try {
+        get().advanceDate();
+      } catch (error) {
+        logger.error('Timeline advance failed', error as Error, {
+          component: 'timelineSlice',
+        });
+        // Stop playback on error
+        get().pause();
+      }
     }, interval);
 
     set({ isPlaying: true, playbackIntervalId: id });

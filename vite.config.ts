@@ -18,4 +18,24 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['three/webgpu'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split Three.js into separate chunk
+          'three': ['three', 'three-spritetext'],
+          // Split react-force-graph
+          'graph': ['react-force-graph-3d', 'd3-force-3d'],
+          // Split vendor libraries
+          'vendor': ['react', 'react-dom', 'zustand'],
+          // Split D3 utilities
+          'd3': ['d3-scale', 'd3-scale-chromatic'],
+        },
+      },
+    },
+    // Enable minification
+    minify: 'terser',
+    // Chunk size warning threshold
+    chunkSizeWarningLimit: 500, // 500KB
+  },
 })

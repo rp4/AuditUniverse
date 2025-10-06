@@ -4,9 +4,10 @@
  * Handles file upload, validation, and data loading
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { validateGraphData } from '@/lib/dataValidator';
 import { parseJSONFile, loadSampleData, extractTemporalDataset } from '@/utils/dataUtils';
+import { logger } from '@/lib/logger';
 import type { GraphData, TemporalDataset } from '@/types';
 import type { ValidationResult } from '@/lib/dataValidator';
 
@@ -27,6 +28,9 @@ export function useFileUpload(): UseFileUploadResult {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
+
+  // Rate limiting: prevent concurrent uploads
+  const uploadInProgressRef = useRef(false);
 
   const processData = useCallback((rawData: any) => {
     // Validate data
@@ -49,6 +53,16 @@ export function useFileUpload(): UseFileUploadResult {
   }, []);
 
   const uploadFile = useCallback(async (file: File) => {
+    // Prevent concurrent uploads
+    if (uploadInProgressRef.current) {
+      logger.warn('Upload already in progress', {
+        component: 'useFileUpload',
+      });
+      setError('An upload is already in progress. Please wait.');
+      return;
+    }
+
+    uploadInProgressRef.current = true;
     setIsLoading(true);
     setError(null);
     setValidationResult(null);
@@ -70,13 +84,25 @@ export function useFileUpload(): UseFileUploadResult {
       // Process data
       processData(rawData);
 
+      logger.info('File uploaded successfully', {
+        component: 'useFileUpload',
+        fileName: file.name,
+        fileSize: file.size,
+      });
+
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load file';
       setError(errorMessage);
       setData(null);
       setTemporalData(null);
+
+      logger.error('File upload failed', err as Error, {
+        component: 'useFileUpload',
+        fileName: file.name,
+      });
     } finally {
       setIsLoading(false);
+      uploadInProgressRef.current = false;
     }
   }, [processData]);
 

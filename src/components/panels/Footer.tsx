@@ -32,9 +32,10 @@ export function Footer({ hasTemporalData, onExportClick }: FooterProps) {
     setCurrentDate(new Date(timestamp));
   };
 
-  const progress = maxDate.getTime() === minDate.getTime()
-    ? 0
-    : ((currentDate.getTime() - minDate.getTime()) / (maxDate.getTime() - minDate.getTime())) * 100;
+  // Calculate progress (unused for now - can be used for progress bar)
+  // const progress = maxDate.getTime() === minDate.getTime()
+  //   ? 0
+  //   : ((currentDate.getTime() - minDate.getTime()) / (maxDate.getTime() - minDate.getTime())) * 100;
 
   return (
     <div className="relative metal-panel px-6 py-3" style={{

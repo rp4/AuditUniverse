@@ -53,8 +53,10 @@ export function FilterSidebar({ rawData, filteredData }: FilterSidebarProps) {
     addSelectedRiskType,
     removeSelectedRiskType,
     clearSelectedRiskTypes,
-    riskThreshold,
-    setRiskThreshold,
+    likelihoodThreshold,
+    severityThreshold,
+    setLikelihoodThreshold,
+    setSeverityThreshold,
     searchQuery,
     setSearchQuery,
     resetFilters
@@ -130,7 +132,7 @@ export function FilterSidebar({ rawData, filteredData }: FilterSidebarProps) {
     selectedUnits.size +
     selectedStandards.size +
     selectedRiskTypes.size +
-    (riskThreshold > 0 ? 1 : 0) +
+    (likelihoodThreshold > 0 || severityThreshold > 0 ? 1 : 0) +
     (searchQuery.trim().length > 0 ? 1 : 0) +
     (activeEntityLayers.size > 0 && activeEntityLayers.size < 7 ? 1 : 0);
 
@@ -268,27 +270,27 @@ export function FilterSidebar({ rawData, filteredData }: FilterSidebarProps) {
       <div className="p-3 border-b border-av-border">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-semibold text-gray-300">
-            Min Risk Rating
+            Min Likelihood
           </span>
           <span className="text-xs text-av-primary">
-            {riskThreshold > 0 ? riskThreshold : 'All'}
+            {likelihoodThreshold > 0 ? likelihoodThreshold : 'All'}
           </span>
         </div>
         <input
           type="range"
           min="0"
-          max="100"
-          step="5"
-          value={riskThreshold}
-          onChange={(e) => setRiskThreshold(Number(e.target.value))}
+          max="10"
+          step="1"
+          value={likelihoodThreshold}
+          onChange={(e) => setLikelihoodThreshold(Number(e.target.value))}
           className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer slider-thumb"
         />
         <div className="flex justify-between text-[10px] text-gray-600 mt-1">
           <span>0</span>
-          <span>25</span>
-          <span>50</span>
-          <span>75</span>
-          <span>100</span>
+          <span>2.5</span>
+          <span>5</span>
+          <span>7.5</span>
+          <span>10</span>
         </div>
       </div>
 

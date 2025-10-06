@@ -67,7 +67,10 @@ export const useActiveEntityLayers = () =>
   useGraphStore((state) => state.activeEntityLayers);
 
 export const useRiskThreshold = () =>
-  useGraphStore((state) => state.riskThreshold);
+  useGraphStore((state) => ({
+    likelihood: state.likelihoodThreshold,
+    severity: state.severityThreshold
+  }));
 
 /**
  * Action hooks for common operations
@@ -96,7 +99,8 @@ export const useTimelineActions = () =>
 export const useFilterActions = () =>
   useGraphStore((state) => ({
     setActivePreset: state.setActivePreset,
-    setRiskThreshold: state.setRiskThreshold,
+    setLikelihoodThreshold: state.setLikelihoodThreshold,
+    setSeverityThreshold: state.setSeverityThreshold,
     toggleEntityLayer: state.toggleEntityLayer,
     resetFilters: state.resetFilters,
     setSearchQuery: state.setSearchQuery
@@ -112,7 +116,8 @@ export const useFilterState = () =>
     selectedStandards: state.selectedStandards,
     selectedRiskTypes: state.selectedRiskTypes,
     activeEntityLayers: state.activeEntityLayers,
-    riskThreshold: state.riskThreshold,
+    likelihoodThreshold: state.likelihoodThreshold,
+    severityThreshold: state.severityThreshold,
     activePreset: state.activePreset,
     searchQuery: state.searchQuery
   }));

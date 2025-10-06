@@ -53,11 +53,11 @@ function App() {
   // Finally apply user filters
   const graphData = useFilters(presetData);
 
-  // Get preset message
-  const presetMessage = useMemo(() => {
-    if (!activePreset || activePreset === 'default') return null;
-    return applyPresetView(activePreset, temporalData).message;
-  }, [temporalData, activePreset]);
+  // Get preset message (unused for now - can be used for status display)
+  // const presetMessage = useMemo(() => {
+  //   if (!activePreset || activePreset === 'default') return null;
+  //   return applyPresetView(activePreset, temporalData).message;
+  // }, [temporalData, activePreset]);
 
   const hasTemporalData = !!(rawGraphData?.events && rawGraphData.events.length > 0);
 

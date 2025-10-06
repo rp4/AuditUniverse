@@ -9,7 +9,7 @@
  */
 
 import * as THREE from 'three';
-import { getSeveritySize, getConfidenceOpacity } from './visualEncoding';
+import { getConfidenceOpacity } from './visualEncoding';
 import type { Node } from '@/types';
 
 /**

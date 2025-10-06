@@ -206,7 +206,7 @@ interface MetricBoxProps {
   color: string;
 }
 
-function MetricBox({ label, value, color }: MetricBoxProps) {
+function MetricBox({ label, value }: MetricBoxProps) {
   return (
     <div className="relative panel-outset p-2">
       {/* Corner rivets (4px) */}

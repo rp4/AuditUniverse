@@ -22,7 +22,7 @@ interface FilterOption {
   label: string;
 }
 
-export function Header({ rawData, filteredData }: HeaderProps) {
+export function Header({ rawData }: HeaderProps) {
   const {
     selectedAudits,
     addSelectedAudit,

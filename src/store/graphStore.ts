@@ -38,7 +38,8 @@ export const useGraphStore = create<GraphStore>()(
     }),
     {
       name: 'AuditVerse Graph Store',
-      enabled: process.env.NODE_ENV === 'development'
+      // Only enable devtools if extension is available
+      enabled: process.env.NODE_ENV === 'development' && typeof window !== 'undefined' && !!(window as any).__REDUX_DEVTOOLS_EXTENSION__
     }
   )
 );

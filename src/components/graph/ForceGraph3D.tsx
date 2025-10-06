@@ -275,10 +275,25 @@ export function ForceGraph3DComponent({
     };
   }, [riskViewMode]); // Recreate when risk view mode changes
 
-  // Get link color based on relationship type
+  // Get link color based on relationship type and selection state
   const linkColor = (link: any) => {
     const l = link as Link;
-    return getLinkColor(l.type);
+    const sourceId = typeof l.source === 'string' ? l.source : (l.source as any).id;
+    const targetId = typeof l.target === 'string' ? l.target : (l.target as any).id;
+
+    const baseColor = getLinkColor(l.type);
+
+    // If a node is selected, adjust alpha for connected vs non-connected edges
+    if (selectedNodeId) {
+      if (sourceId === selectedNodeId || targetId === selectedNodeId) {
+        // Connected edge - keep full opacity
+        return baseColor;
+      }
+      // Non-connected edge - make very transparent
+      return baseColor.replace(')', ', 0.05)').replace('rgb', 'rgba');
+    }
+
+    return baseColor;
   };
 
   // Get link width - highlight connected edges
@@ -296,28 +311,9 @@ export function ForceGraph3DComponent({
     return getLinkWidth();
   };
 
-  // Get link opacity based on connected nodes and selection
-  const linkOpacity = (link: any) => {
-    const l = link as Link;
-    const sourceId = typeof l.source === 'string' ? l.source : (l.source as any).id;
-    const targetId = typeof l.target === 'string' ? l.target : (l.target as any).id;
-    const sourceNode = nodeMap.get(sourceId);
-    const targetNode = nodeMap.get(targetId);
-
-    // If a node is selected, highlight connected edges
-    if (selectedNodeId) {
-      if (sourceId === selectedNodeId || targetId === selectedNodeId) {
-        return 0.9; // High opacity for connected edges
-      }
-      return 0.05; // Heavily dim other edges
-    }
-
-    // Default opacity based on node confidence
-    if (sourceNode && targetNode) {
-      return getLinkOpacity(sourceNode, targetNode);
-    }
-    return 0.6;
-  };
+  // Calculate link opacity - static value since ForceGraph3D expects number, not function
+  // We'll handle opacity through linkColor instead by adjusting alpha
+  const staticLinkOpacity = 0.6;
 
   // Highlight links connected to selected node
   const linkDirectionalParticleWidth = (link: any) => {
@@ -351,7 +347,7 @@ export function ForceGraph3DComponent({
         nodeLabel={nodeLabel}
         linkColor={linkColor as any}
         linkWidth={linkWidth as any}
-        linkOpacity={linkOpacity as any}
+        linkOpacity={staticLinkOpacity}
         linkDirectionalParticles={2}
         linkDirectionalParticleWidth={linkDirectionalParticleWidth as any}
         linkDirectionalParticleSpeed={0.005}

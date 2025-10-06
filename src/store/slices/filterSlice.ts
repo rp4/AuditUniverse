@@ -31,6 +31,12 @@ export interface FilterSlice {
   // Search query
   searchQuery: string;
 
+  // Risk view mode (residual vs inherent)
+  riskViewMode: 'residual' | 'inherent';
+
+  // Link strength filter
+  linkStrength: number;
+
   // Actions
   setSelectedAudits: (audits: Set<string>) => void;
   addSelectedAudit: (auditId: string) => void;
@@ -63,6 +69,10 @@ export interface FilterSlice {
 
   setSearchQuery: (query: string) => void;
 
+  setRiskViewMode: (mode: 'residual' | 'inherent') => void;
+
+  setLinkStrength: (strength: number) => void;
+
   resetFilters: () => void;
 }
 
@@ -86,6 +96,8 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
   riskThreshold: 0,
   activePreset: null,
   searchQuery: '',
+  riskViewMode: 'residual',
+  linkStrength: 0.5,
 
   // Audit actions
   setSelectedAudits: (audits) => set({ selectedAudits: audits }),
@@ -168,6 +180,12 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
   // Search action
   setSearchQuery: (query) => set({ searchQuery: query }),
 
+  // Risk view mode action
+  setRiskViewMode: (mode) => set({ riskViewMode: mode }),
+
+  // Link strength action
+  setLinkStrength: (strength) => set({ linkStrength: strength }),
+
   // Reset all filters
   resetFilters: () =>
     set({
@@ -178,6 +196,8 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
       activeEntityLayers: new Set(DEFAULT_ENTITY_LAYERS),
       riskThreshold: 0,
       activePreset: null,
-      searchQuery: ''
+      searchQuery: '',
+      riskViewMode: 'residual',
+      linkStrength: 0.5
     })
 });

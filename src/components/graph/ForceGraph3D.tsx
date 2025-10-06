@@ -84,6 +84,82 @@ export function ForceGraph3DComponent({
     }
   }, []);
 
+  // Update node materials when selection changes
+  useEffect(() => {
+    if (!graphRef.current) return;
+
+    const graph = graphRef.current;
+    const scene = graph.scene();
+    if (!scene) return;
+
+    const activeHighlights = highlightedNodeIds.size > 0 ? highlightedNodeIds : computedHighlightedIds;
+    const hasSelection = activeHighlights.size > 0;
+
+    console.log('🔍 Selection Debug:', {
+      selectedNodeId,
+      highlightedCount: activeHighlights.size,
+      hasSelection,
+      highlightedIds: Array.from(activeHighlights)
+    });
+
+    let selectedCount = 0;
+    let highlightedCount = 0;
+    let dimmedCount = 0;
+    let normalCount = 0;
+
+    // Find and update all node meshes in the scene
+    scene.traverse((obj: any) => {
+      if (obj.isMesh && obj.__nodeData) {
+        const node = obj.__nodeData as Node;
+        const material = obj.material as THREE.MeshPhongMaterial;
+        const isSelected = selectedNodeId === node.id;
+        const isHighlighted = activeHighlights.has(node.id);
+
+        // Update emissive intensity, scale, and opacity
+        if (isSelected) {
+          material.emissiveIntensity = 0.8;
+          material.opacity = 1.0;
+          material.transparent = false;
+          obj.scale.setScalar(1.3);
+          selectedCount++;
+          console.log('✨ Selected node:', node.id, node.name, 'opacity:', material.opacity);
+        } else if (isHighlighted) {
+          material.emissiveIntensity = 0.5;
+          material.opacity = 1.0;
+          material.transparent = false;
+          obj.scale.setScalar(1.15);
+          highlightedCount++;
+        } else if (hasSelection) {
+          // Dim non-highlighted nodes when there's a selection
+          material.emissiveIntensity = 0.1;
+          material.opacity = 0.25;
+          material.transparent = true;
+          material.needsUpdate = true;
+          obj.scale.setScalar(1.0);
+          dimmedCount++;
+          if (dimmedCount === 1) {
+            console.log('🌑 First dimmed node:', node.id, 'opacity:', material.opacity, 'transparent:', material.transparent);
+          }
+        } else {
+          // No selection - normal state
+          material.emissiveIntensity = 0.2;
+          material.opacity = 1.0;
+          material.transparent = false;
+          obj.scale.setScalar(1.0);
+          normalCount++;
+        }
+      }
+    });
+
+    console.log('📊 Node counts:', {
+      selected: selectedCount,
+      highlighted: highlightedCount,
+      dimmed: dimmedCount,
+      normal: normalCount,
+      total: selectedCount + highlightedCount + dimmedCount + normalCount
+    });
+  }, [selectedNodeId, computedHighlightedIds, highlightedNodeIds]);
+
   // Handle node clicks
   const handleNodeClick = (node: any) => {
     if (onNodeClick) {
@@ -99,9 +175,14 @@ export function ForceGraph3DComponent({
   };
 
   // Create node Three.js object with visual encoding
-  const nodeThreeObject = (node: any) => {
-    return createNodeShape(node as Node);
-  };
+  // This should NOT depend on selection state to avoid recreating nodes
+  const nodeThreeObject = useMemo(() => {
+    return (node: any) => {
+      const n = node as Node;
+      // Always create with default state - we'll update via useEffect
+      return createNodeShape(n, false, false);
+    };
+  }, []); // Empty deps - only create this function once
 
   // Get link color based on relationship type
   const linkColor = (link: any) => {
@@ -109,30 +190,42 @@ export function ForceGraph3DComponent({
     return getLinkColor(l.type);
   };
 
-  // Get link width
-  const linkWidth = () => {
+  // Get link width - highlight connected edges
+  const linkWidth = (link: any) => {
+    if (!selectedNodeId) return getLinkWidth();
+
+    const l = link as Link;
+    const sourceId = typeof l.source === 'string' ? l.source : (l.source as any).id;
+    const targetId = typeof l.target === 'string' ? l.target : (l.target as any).id;
+
+    // Make connected edges thicker
+    if (sourceId === selectedNodeId || targetId === selectedNodeId) {
+      return 3.0; // 3x thicker for connected edges
+    }
     return getLinkWidth();
   };
 
-  // Get link opacity based on connected nodes
+  // Get link opacity based on connected nodes and selection
   const linkOpacity = (link: any) => {
     const l = link as Link;
-    const sourceNode = nodeMap.get(typeof l.source === 'string' ? l.source : (l.source as any).id);
-    const targetNode = nodeMap.get(typeof l.target === 'string' ? l.target : (l.target as any).id);
+    const sourceId = typeof l.source === 'string' ? l.source : (l.source as any).id;
+    const targetId = typeof l.target === 'string' ? l.target : (l.target as any).id;
+    const sourceNode = nodeMap.get(sourceId);
+    const targetNode = nodeMap.get(targetId);
 
+    // If a node is selected, highlight connected edges
+    if (selectedNodeId) {
+      if (sourceId === selectedNodeId || targetId === selectedNodeId) {
+        return 0.9; // High opacity for connected edges
+      }
+      return 0.05; // Heavily dim other edges
+    }
+
+    // Default opacity based on node confidence
     if (sourceNode && targetNode) {
       return getLinkOpacity(sourceNode, targetNode);
     }
     return 0.6;
-  };
-
-  // Dim nodes that are not highlighted (when selection is active)
-  const nodeOpacity = (node: any) => {
-    const activeHighlights = highlightedNodeIds.size > 0 ? highlightedNodeIds : computedHighlightedIds;
-    if (activeHighlights.size === 0) {
-      return 1.0; // No selection, show all nodes normally
-    }
-    return activeHighlights.has((node as Node).id) ? 1.0 : 0.2;
   };
 
   // Highlight links connected to selected node
@@ -156,7 +249,6 @@ export function ForceGraph3DComponent({
         ref={graphRef}
         graphData={data}
         nodeThreeObject={nodeThreeObject}
-        nodeOpacity={nodeOpacity as any}
         linkColor={linkColor as any}
         linkWidth={linkWidth as any}
         linkOpacity={linkOpacity as any}

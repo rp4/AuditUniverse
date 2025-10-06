@@ -67,71 +67,47 @@ function getNodeSize(node: Node): number {
  * Create Three.js mesh for a node
  *
  * Applies visual encoding:
- * - Shape based on node type
+ * - Shape: Sphere for all entity types
  * - Color based on likelihood (risk) or entity type
  * - Size based on severity (risk) or fixed
  * - Opacity based on confidence or age
  */
-export function createNodeShape(node: Node): THREE.Object3D {
+export function createNodeShape(
+  node: Node,
+  isSelected: boolean = false,
+  isHighlighted: boolean = false
+): THREE.Object3D {
   const size = getNodeSize(node);
   const color = getNodeColor(node);
   const opacity = getConfidenceOpacity(node);
 
-  // Create geometry based on node type
-  let geometry: THREE.BufferGeometry;
+  // All nodes are spheres
+  const geometry = new THREE.SphereGeometry(size, 32, 32);
 
-  switch (node.type) {
-    case 'risk':
-      // Sphere for risks
-      geometry = new THREE.SphereGeometry(size, 32, 32);
-      break;
+  // Determine emissive intensity based on selection/highlight state
+  let emissiveIntensity = 0.2;
+  let scale = 1.0;
 
-    case 'control':
-      // Cube for controls
-      geometry = new THREE.BoxGeometry(size, size, size);
-      break;
-
-    case 'audit':
-      // Octahedron for audits
-      geometry = new THREE.OctahedronGeometry(size);
-      break;
-
-    case 'issue':
-      // Cone for issues
-      geometry = new THREE.ConeGeometry(size, size * 1.5, 32);
-      break;
-
-    case 'incident':
-      // Dodecahedron for incidents
-      geometry = new THREE.DodecahedronGeometry(size);
-      break;
-
-    case 'standard':
-      // Torus for standards
-      geometry = new THREE.TorusGeometry(size * 0.7, size * 0.3, 16, 32);
-      break;
-
-    case 'businessUnit':
-      // Icosahedron for business units
-      geometry = new THREE.IcosahedronGeometry(size);
-      break;
-
-    default:
-      // Default to sphere
-      geometry = new THREE.SphereGeometry(size, 32, 32);
+  if (isSelected) {
+    emissiveIntensity = 0.8; // Strong glow for selected node
+    scale = 1.3; // Make it larger
+  } else if (isHighlighted) {
+    emissiveIntensity = 0.5; // Medium glow for connected nodes
+    scale = 1.15; // Slightly larger
   }
 
   // Create material with visual encoding
   const material = new THREE.MeshPhongMaterial({
     color: new THREE.Color(color),
     emissive: new THREE.Color(color),
-    emissiveIntensity: 0.2,
+    emissiveIntensity: emissiveIntensity,
     transparent: opacity < 1.0,
     opacity: opacity,
     shininess: 30
   });
 
   const mesh = new THREE.Mesh(geometry, material);
+  mesh.scale.setScalar(scale);
 
   // Store node data for later reference
   (mesh as any).__nodeData = node;

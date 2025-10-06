@@ -90,7 +90,7 @@ export function PresetFilter() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 glass-panel border border-av-border rounded max-h-96 overflow-y-auto z-20">
+        <div className="absolute top-full left-0 right-0 mt-2 glass-panel border border-av-border rounded max-h-96 overflow-y-auto z-50">
           {/* Default View */}
           <button
             onClick={() => handlePresetSelect('default')}
@@ -130,7 +130,7 @@ export function PresetFilter() {
       {/* Click outside to close */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-10"
+          className="fixed inset-0 z-40"
           onClick={() => setIsOpen(false)}
         />
       )}

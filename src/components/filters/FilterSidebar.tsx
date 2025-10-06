@@ -54,9 +54,7 @@ export function FilterSidebar({ rawData, filteredData }: FilterSidebarProps) {
     removeSelectedRiskType,
     clearSelectedRiskTypes,
     likelihoodThreshold,
-    severityThreshold,
     setLikelihoodThreshold,
-    setSeverityThreshold,
     searchQuery,
     setSearchQuery,
     resetFilters
@@ -132,7 +130,7 @@ export function FilterSidebar({ rawData, filteredData }: FilterSidebarProps) {
     selectedUnits.size +
     selectedStandards.size +
     selectedRiskTypes.size +
-    (likelihoodThreshold > 0 || severityThreshold > 0 ? 1 : 0) +
+    (likelihoodThreshold > 0 ? 1 : 0) +
     (searchQuery.trim().length > 0 ? 1 : 0) +
     (activeEntityLayers.size > 0 && activeEntityLayers.size < 7 ? 1 : 0);
 

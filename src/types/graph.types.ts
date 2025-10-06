@@ -27,6 +27,16 @@ export interface BaseNode {
   owner?: string;
   last_assessment?: string;
   confidence?: number;
+  // D3 force simulation properties (added at runtime)
+  x?: number;
+  y?: number;
+  z?: number;
+  vx?: number;
+  vy?: number;
+  vz?: number;
+  fx?: number;
+  fy?: number;
+  fz?: number;
 }
 
 export interface RiskNode extends BaseNode {

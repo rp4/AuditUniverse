@@ -9,7 +9,7 @@ import { useRef, useEffect, useMemo, useState } from 'react';
 import ForceGraph3D from 'react-force-graph-3d';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
-import { createNodeShape, getLinkColor, getLinkWidth, getLinkOpacity } from '@/lib/nodeShapes';
+import { createNodeShape, getLinkColor, getLinkWidth } from '@/lib/nodeShapes';
 import { useGraphStore } from '@/store/graphStore';
 import type { GraphData, Node, Link } from '@/types';
 

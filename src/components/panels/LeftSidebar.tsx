@@ -41,41 +41,102 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
     setRiskViewMode,
     activeEntityLayers,
     toggleEntityLayer,
-    riskThreshold,
-    setRiskThreshold,
+    likelihoodThreshold,
+    setLikelihoodThreshold,
+    severityThreshold,
+    setSeverityThreshold,
     linkStrength,
     setLinkStrength
   } = useGraphStore();
 
   return (
-    <div className="w-56 h-full bg-gray-900/95 border-r border-av-border/50 overflow-y-auto p-4 space-y-4">
+    <div className="relative w-56 h-full metal-panel overflow-y-auto p-4 space-y-4" style={{
+      borderRight: '5px solid #4a4a4f',
+      borderRightStyle: 'groove',
+      boxShadow: 'inset -3px 0 10px rgba(0,0,0,0.8), inset 3px 0 10px rgba(80,80,80,0.3), 5px 0 15px rgba(0,0,0,0.6)'
+    }}>
+      {/* Corner rivets (12px) */}
+      <div className="absolute top-2 left-2 w-[12px] h-[12px] rivet" />
+      <div className="absolute top-2 right-2 w-[12px] h-[12px] rivet" />
+      <div className="absolute bottom-2 left-2 w-[12px] h-[12px] rivet" />
+      <div className="absolute bottom-2 right-2 w-[12px] h-[12px] rivet" />
+
+      {/* Vertical label on left edge */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full -rotate-90 origin-right text-[10px] uppercase tracking-widest font-bold pr-2" style={{
+        fontFamily: 'Orbitron, monospace',
+        color: '#00ffcc',
+        textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+        letterSpacing: '1.5px'
+      }}>
+        Severity
+      </div>
       {/* Risk View Mode */}
-      <div className="bg-gray-800/40 border border-av-primary/30 rounded p-3">
-        <h3 className="text-av-primary text-xs font-bold uppercase tracking-wider mb-3">
+      <div className="relative panel-outset p-3">
+        {/* Corner rivets (4px) */}
+        <div className="absolute top-0.5 left-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute top-0.5 right-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute bottom-0.5 left-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute bottom-0.5 right-0.5 w-[4px] h-[4px] rivet" />
+
+        <h3 className="text-sm font-bold uppercase tracking-widest mb-3 text-center" style={{
+          fontFamily: 'Orbitron, monospace',
+          color: '#8ab4f8',
+          textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+          letterSpacing: '1.5px'
+        }}>
           Risk View Mode
         </h3>
         <div className="flex items-center space-x-2">
+          {/* Industrial Toggle Track */}
           <div
-            className={`w-10 h-5 rounded-full transition-colors cursor-pointer relative ${
-              riskViewMode === 'residual' ? 'bg-av-primary' : 'bg-gray-600'
-            }`}
+            className="relative w-12 h-6 cursor-pointer transition-all"
             onClick={() => setRiskViewMode(riskViewMode === 'residual' ? 'inherent' : 'residual')}
+            style={{
+              background: '#1a1a1f',
+              border: '2px solid #3a3a3f',
+              borderStyle: 'inset',
+              borderRadius: '3px',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)'
+            }}
           >
+            {/* Industrial Sliding Thumb */}
             <div
-              className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
-                riskViewMode === 'residual' ? 'translate-x-5' : 'translate-x-0.5'
-              }`}
+              className={`absolute top-0.5 w-5 h-4 transition-all duration-300`}
+              style={{
+                background: riskViewMode === 'residual' ? '#00ffcc' : '#5a5a5f',
+                backgroundImage: riskViewMode === 'residual'
+                  ? 'radial-gradient(circle at 30% 30%, #00ffcc, #00aa99)'
+                  : 'radial-gradient(circle at 30% 30%, #7a7a7f, #3a3a3f)',
+                border: '2px solid #4a4a4f',
+                borderStyle: 'outset',
+                borderRadius: '2px',
+                boxShadow: riskViewMode === 'residual'
+                  ? '1px 1px 2px rgba(0,0,0,0.5), 0 0 6px rgba(0,255,204,0.6)'
+                  : '1px 1px 2px rgba(0,0,0,0.5), inset -1px -1px 1px rgba(0,0,0,0.3)',
+                transform: riskViewMode === 'residual' ? 'translateX(24px)' : 'translateX(2px)'
+              }}
             />
           </div>
           <span className="text-xs text-gray-300">
-            {riskViewMode === 'residual' ? 'Residual Risk (with controls)' : 'Inherent Risk'}
+            {riskViewMode === 'residual' ? 'Residual Risk' : 'Inherent Risk'}
           </span>
         </div>
       </div>
 
       {/* Entity Layers */}
-      <div className="bg-gray-800/40 border border-av-primary/30 rounded p-3">
-        <h3 className="text-av-primary text-xs font-bold uppercase tracking-wider mb-3">
+      <div className="relative panel-outset p-3">
+        {/* Corner rivets (4px) */}
+        <div className="absolute top-0.5 left-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute top-0.5 right-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute bottom-0.5 left-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute bottom-0.5 right-0.5 w-[4px] h-[4px] rivet" />
+
+        <h3 className="text-sm font-bold uppercase tracking-widest mb-3 text-center" style={{
+          fontFamily: 'Orbitron, monospace',
+          color: '#8ab4f8',
+          textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+          letterSpacing: '1.5px'
+        }}>
           Entity Layers
         </h3>
         <div className="space-y-1.5">
@@ -105,30 +166,83 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
       </div>
 
       {/* Filters */}
-      <div className="bg-gray-800/40 border border-av-primary/30 rounded p-3">
-        <h3 className="text-av-primary text-xs font-bold uppercase tracking-wider mb-3">
+      <div className="relative panel-outset p-3">
+        {/* Corner rivets (4px) */}
+        <div className="absolute top-0.5 left-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute top-0.5 right-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute bottom-0.5 left-0.5 w-[4px] h-[4px] rivet" />
+        <div className="absolute bottom-0.5 right-0.5 w-[4px] h-[4px] rivet" />
+
+        <h3 className="text-sm font-bold uppercase tracking-widest mb-3 text-center" style={{
+          fontFamily: 'Orbitron, monospace',
+          color: '#8ab4f8',
+          textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+          letterSpacing: '1.5px'
+        }}>
           Filters
         </h3>
 
-        {/* Risk Threshold */}
+        {/* Likelihood Threshold */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-gray-300">Risk Threshold</span>
-            <span className="text-xs text-av-primary font-bold">{riskThreshold}</span>
+            <span className="text-xs text-gray-300">Likelihood</span>
+            <span className="text-xs font-bold" style={{
+              fontFamily: 'Orbitron, monospace',
+              color: '#00ffdd',
+              textShadow: '0 1px 2px rgba(0,0,0,0.5)'
+            }}>{likelihoodThreshold}</span>
           </div>
           <input
             type="range"
             min="0"
-            max="100"
-            step="5"
-            value={riskThreshold}
-            onChange={(e) => setRiskThreshold(Number(e.target.value))}
-            className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer slider-thumb"
+            max="10"
+            step="1"
+            value={likelihoodThreshold}
+            onChange={(e) => setLikelihoodThreshold(Number(e.target.value))}
+            className="slider-industrial w-full h-2 rounded-lg appearance-none cursor-pointer"
+            style={{
+              background: '#1a1a1f',
+              border: '1px solid #2a2a2f',
+              borderStyle: 'inset',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)'
+            }}
           />
           <div className="flex justify-between text-[9px] text-gray-600 mt-1">
             <span>0</span>
-            <span>50</span>
-            <span>100</span>
+            <span>5</span>
+            <span>10</span>
+          </div>
+        </div>
+
+        {/* Severity Threshold */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-gray-300">Severity</span>
+            <span className="text-xs font-bold" style={{
+              fontFamily: 'Orbitron, monospace',
+              color: '#00ffdd',
+              textShadow: '0 1px 2px rgba(0,0,0,0.5)'
+            }}>{severityThreshold}</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            step="1"
+            value={severityThreshold}
+            onChange={(e) => setSeverityThreshold(Number(e.target.value))}
+            className="slider-industrial w-full h-2 rounded-lg appearance-none cursor-pointer"
+            style={{
+              background: '#1a1a1f',
+              border: '1px solid #2a2a2f',
+              borderStyle: 'inset',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)'
+            }}
+          />
+          <div className="flex justify-between text-[9px] text-gray-600 mt-1">
+            <span>0</span>
+            <span>5</span>
+            <span>10</span>
           </div>
         </div>
 
@@ -136,7 +250,11 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
         <div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs text-gray-300">Link Strength</span>
-            <span className="text-xs text-av-primary font-bold">{linkStrength.toFixed(1)}</span>
+            <span className="text-xs font-bold" style={{
+              fontFamily: 'Orbitron, monospace',
+              color: '#00ffdd',
+              textShadow: '0 1px 2px rgba(0,0,0,0.5)'
+            }}>{linkStrength.toFixed(1)}</span>
           </div>
           <input
             type="range"
@@ -145,7 +263,13 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
             step="0.1"
             value={linkStrength}
             onChange={(e) => setLinkStrength(Number(e.target.value))}
-            className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer slider-thumb"
+            className="slider-industrial w-full h-2 rounded-lg appearance-none cursor-pointer"
+            style={{
+              background: '#1a1a1f',
+              border: '1px solid #2a2a2f',
+              borderStyle: 'inset',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)'
+            }}
           />
           <div className="flex justify-between text-[9px] text-gray-600 mt-1">
             <span>0.0</span>

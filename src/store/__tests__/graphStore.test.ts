@@ -17,9 +17,11 @@ const resetStore = () => {
     selectedStandards: new Set(),
     selectedRiskTypes: new Set(),
     activeEntityLayers: new Set(['risk', 'control', 'audit', 'issue', 'incident', 'standard', 'businessUnit']),
-    riskThreshold: 0,
+    likelihoodThreshold: 0,
+    severityThreshold: 0,
     activePreset: null,
     searchQuery: '',
+    riskViewMode: 'residual',
 
     // Timeline state
     currentDate: new Date(new Date().getFullYear(), 0, 1),
@@ -110,12 +112,19 @@ describe('FilterSlice', () => {
     });
   });
 
-  describe('Risk threshold', () => {
-    it('sets risk threshold', () => {
-      const { setRiskThreshold } = useGraphStore.getState();
-      setRiskThreshold(7);
+  describe('Risk thresholds', () => {
+    it('sets likelihood threshold', () => {
+      const { setLikelihoodThreshold } = useGraphStore.getState();
+      setLikelihoodThreshold(7);
 
-      expect(useGraphStore.getState().riskThreshold).toBe(7);
+      expect(useGraphStore.getState().likelihoodThreshold).toBe(7);
+    });
+
+    it('sets severity threshold', () => {
+      const { setSeverityThreshold } = useGraphStore.getState();
+      setSeverityThreshold(8);
+
+      expect(useGraphStore.getState().severityThreshold).toBe(8);
     });
   });
 
@@ -151,7 +160,8 @@ describe('FilterSlice', () => {
 
       // Set various filters
       store.addSelectedAudit('audit1');
-      store.setRiskThreshold(5);
+      store.setLikelihoodThreshold(5);
+      store.setSeverityThreshold(6);
       store.setActivePreset('high-residual-risk');
       store.setSearchQuery('test');
 
@@ -160,7 +170,8 @@ describe('FilterSlice', () => {
 
       const state = useGraphStore.getState();
       expect(state.selectedAudits.size).toBe(0);
-      expect(state.riskThreshold).toBe(0);
+      expect(state.likelihoodThreshold).toBe(0);
+      expect(state.severityThreshold).toBe(0);
       expect(state.activePreset).toBe(null);
       expect(state.searchQuery).toBe('');
       expect(state.activeEntityLayers.size).toBe(7);

@@ -59,7 +59,7 @@ function App() {
     return applyPresetView(activePreset, temporalData).message;
   }, [temporalData, activePreset]);
 
-  const hasTemporalData = rawGraphData?.events && rawGraphData.events.length > 0;
+  const hasTemporalData = !!(rawGraphData?.events && rawGraphData.events.length > 0);
 
   // Track mouse position for tooltip
   useEffect(() => {
@@ -101,12 +101,12 @@ function App() {
       {/* Main content area - Contains sidebars and graph viewport */}
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar - Flush with header/footer */}
-        <div className="relative z-20 flex-shrink-0 w-56">
+        <div className="relative z-20 flex-shrink-0 w-56 h-full overflow-y-auto">
           <LeftSidebar rawData={rawGraphData || { nodes: [], links: [] }} />
         </div>
 
         {/* Center - 3D Graph "Viewport into space" */}
-        <div className="flex-1 relative z-0">
+        <div className="flex-1 relative z-0 h-full overflow-hidden">
           <ForceGraph3DComponent
             data={graphData}
             onNodeClick={setSelectedNode}
@@ -122,8 +122,8 @@ function App() {
           />
         </div>
 
-        {/* Right Sidebar - Flush with header/footer */}
-        <div className="relative z-20 flex-shrink-0 w-64">
+        {/* Right Sidebar - Flush with header/footer - Always visible */}
+        <div className="relative z-20 flex-shrink-0 w-64 h-full overflow-y-auto">
           <RightSidebar
             node={selectedNode}
             graphData={rawGraphData || { nodes: [], links: [] }}

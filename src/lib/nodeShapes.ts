@@ -9,7 +9,7 @@
  */
 
 import * as THREE from 'three';
-import { getLikelihoodColor, getSeveritySize, getConfidenceOpacity } from './visualEncoding';
+import { getSeveritySize, getConfidenceOpacity } from './visualEncoding';
 import type { Node } from '@/types';
 
 /**
@@ -41,45 +41,73 @@ export const RELATIONSHIP_COLORS = {
 } as const;
 
 /**
- * Get base color for a node
+ * Get base color for a node based on likelihood
+ * Light red (low likelihood) to dark red (high likelihood)
  */
-function getNodeColor(node: Node): string {
+function getNodeColor(node: Node, riskViewMode: 'residual' | 'inherent' = 'residual'): string {
   if (node.type === 'risk') {
-    // Risk nodes use likelihood-based color
-    return getLikelihoodColor((node as any).residual_likelihood || 5);
+    const likelihood = riskViewMode === 'residual'
+      ? (node as any).residual_likelihood
+      : (node as any).inherent_likelihood;
+
+    // Map likelihood (1-10) to color scale from light red to dark red
+    // Low likelihood (1) = #ffccdd (light pink/red)
+    // High likelihood (10) = #990000 (dark red)
+    const normalizedLikelihood = (likelihood - 1) / 9; // 0 to 1
+
+    // Interpolate between light red and dark red
+    const r = Math.round(255 - (normalizedLikelihood * 102)); // 255 -> 153
+    const g = Math.round(204 - (normalizedLikelihood * 204)); // 204 -> 0
+    const b = Math.round(221 - (normalizedLikelihood * 221)); // 221 -> 0
+
+    return `rgb(${r}, ${g}, ${b})`;
   }
   return ENTITY_COLORS[node.type];
 }
 
 /**
  * Get base size for a node
+ * More dramatic scaling for severity to make differences more apparent
  */
-function getNodeSize(node: Node): number {
+function getNodeSize(node: Node, riskViewMode: 'residual' | 'inherent' = 'residual'): number {
   if (node.type === 'risk') {
-    // Risk nodes use severity-based size
-    return getSeveritySize((node as any).residual_severity || 5);
+    // Risk nodes use severity-based size from the appropriate view mode
+    const severity = riskViewMode === 'residual'
+      ? (node as any).residual_severity
+      : (node as any).inherent_severity;
+
+    // More dramatic exponential scaling for visual impact
+    // Low severity (1) = ~5px
+    // Medium severity (5) = ~12px
+    // High severity (10) = ~25px
+    const baseSize = 5;
+    const maxSize = 20;
+    const normalizedSeverity = (severity - 1) / 9; // 0 to 1
+    return baseSize + Math.pow(normalizedSeverity, 1.5) * maxSize;
   }
   // Other nodes use fixed size
   return 8;
 }
+
 
 /**
  * Create Three.js mesh for a node
  *
  * Applies visual encoding:
  * - Shape: Sphere for all entity types
- * - Color based on likelihood (risk) or entity type
- * - Size based on severity (risk) or fixed
- * - Opacity based on confidence or age
+ * - Color: Light red to dark red based on likelihood (risks), entity-specific for others
+ * - Size: Based on severity with dramatic scaling (risks), fixed for others
+ * - Opacity: Always 1.0 for risks, confidence/age-based for others
  */
 export function createNodeShape(
   node: Node,
   isSelected: boolean = false,
-  isHighlighted: boolean = false
+  isHighlighted: boolean = false,
+  riskViewMode: 'residual' | 'inherent' = 'residual'
 ): THREE.Object3D {
-  const size = getNodeSize(node);
-  const color = getNodeColor(node);
-  const opacity = getConfidenceOpacity(node);
+  const size = getNodeSize(node, riskViewMode);
+  const color = getNodeColor(node, riskViewMode);
+  const opacity = node.type === 'risk' ? 1.0 : getConfidenceOpacity(node);
 
   // All nodes are spheres
   const geometry = new THREE.SphereGeometry(size, 32, 32);

@@ -8,7 +8,8 @@
  * - Selected business units (risks owned by these units)
  * - Selected standards (risks requiring these standards)
  * - Risk types (operational, financial, etc.)
- * - Risk threshold (minimum residual rating)
+ * - Likelihood threshold (minimum likelihood based on view mode)
+ * - Severity threshold (minimum severity based on view mode)
  * - Search query (name contains)
  */
 
@@ -23,7 +24,9 @@ export function useFilters(rawData: GraphData): GraphData {
     selectedStandards,
     selectedRiskTypes,
     activeEntityLayers,
-    riskThreshold,
+    likelihoodThreshold,
+    severityThreshold,
+    riskViewMode,
     searchQuery
   } = useGraphStore();
 
@@ -146,12 +149,21 @@ export function useFilters(rawData: GraphData): GraphData {
       });
     }
 
-    // 7. Risk threshold filter (minimum residual rating)
-    if (riskThreshold > 0) {
+    // 7. Risk threshold filter (minimum likelihood and severity based on view mode)
+    if (likelihoodThreshold > 0 || severityThreshold > 0) {
       nodes = nodes.filter(node => {
         if (node.type === 'risk') {
-          const residualRating = (node as any).residual_likelihood * (node as any).residual_severity;
-          return residualRating >= riskThreshold;
+          const riskNode = node as any;
+
+          // Apply filter based on risk view mode
+          const likelihood = riskViewMode === 'residual'
+            ? riskNode.residual_likelihood
+            : riskNode.inherent_likelihood;
+          const severity = riskViewMode === 'residual'
+            ? riskNode.residual_severity
+            : riskNode.inherent_severity;
+
+          return likelihood >= likelihoodThreshold && severity >= severityThreshold;
         }
         return true; // Keep non-risks
       });
@@ -173,7 +185,9 @@ export function useFilters(rawData: GraphData): GraphData {
     selectedStandards,
     selectedRiskTypes,
     activeEntityLayers,
-    riskThreshold,
+    likelihoodThreshold,
+    severityThreshold,
+    riskViewMode,
     searchQuery
   ]);
 

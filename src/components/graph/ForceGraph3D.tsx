@@ -8,6 +8,7 @@
 import { useRef, useEffect, useMemo } from 'react';
 import ForceGraph3D from 'react-force-graph-3d';
 import { createNodeShape, getLinkColor, getLinkWidth, getLinkOpacity } from '@/lib/nodeShapes';
+import { useGraphStore } from '@/store/graphStore';
 import type { GraphData, Node, Link } from '@/types';
 
 interface ForceGraph3DProps {
@@ -26,6 +27,7 @@ export function ForceGraph3DComponent({
   highlightedNodeIds = new Set()
 }: ForceGraph3DProps) {
   const graphRef = useRef<any>();
+  const riskViewMode = useGraphStore(state => state.riskViewMode);
 
   // Build node ID to node map for quick lookups
   const nodeMap = useMemo(() => {
@@ -175,14 +177,14 @@ export function ForceGraph3DComponent({
   };
 
   // Create node Three.js object with visual encoding
-  // This should NOT depend on selection state to avoid recreating nodes
+  // Recreate nodes when riskViewMode changes
   const nodeThreeObject = useMemo(() => {
     return (node: any) => {
       const n = node as Node;
       // Always create with default state - we'll update via useEffect
-      return createNodeShape(n, false, false);
+      return createNodeShape(n, false, false, riskViewMode);
     };
-  }, []); // Empty deps - only create this function once
+  }, [riskViewMode]); // Recreate when risk view mode changes
 
   // Get link color based on relationship type
   const linkColor = (link: any) => {

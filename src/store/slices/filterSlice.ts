@@ -22,8 +22,9 @@ export interface FilterSlice {
   // Entity layer visibility (which node types to show)
   activeEntityLayers: Set<NodeType>;
 
-  // Risk threshold (minimum residual rating to display)
-  riskThreshold: number;
+  // Risk thresholds (minimum likelihood and severity to display)
+  likelihoodThreshold: number;
+  severityThreshold: number;
 
   // Active preset view
   activePreset: PresetId | null;
@@ -63,7 +64,8 @@ export interface FilterSlice {
   showAllEntityLayers: () => void;
   hideAllEntityLayers: () => void;
 
-  setRiskThreshold: (threshold: number) => void;
+  setLikelihoodThreshold: (threshold: number) => void;
+  setSeverityThreshold: (threshold: number) => void;
 
   setActivePreset: (preset: PresetId | null) => void;
 
@@ -93,7 +95,8 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
   selectedStandards: new Set(),
   selectedRiskTypes: new Set(),
   activeEntityLayers: new Set(DEFAULT_ENTITY_LAYERS),
-  riskThreshold: 0,
+  likelihoodThreshold: 0,
+  severityThreshold: 0,
   activePreset: null,
   searchQuery: '',
   riskViewMode: 'residual',
@@ -171,8 +174,9 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
     set({ activeEntityLayers: new Set(DEFAULT_ENTITY_LAYERS) }),
   hideAllEntityLayers: () => set({ activeEntityLayers: new Set() }),
 
-  // Risk threshold action
-  setRiskThreshold: (threshold) => set({ riskThreshold: threshold }),
+  // Risk threshold actions
+  setLikelihoodThreshold: (threshold) => set({ likelihoodThreshold: threshold }),
+  setSeverityThreshold: (threshold) => set({ severityThreshold: threshold }),
 
   // Preset action
   setActivePreset: (preset) => set({ activePreset: preset }),
@@ -194,7 +198,8 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
       selectedStandards: new Set(),
       selectedRiskTypes: new Set(),
       activeEntityLayers: new Set(DEFAULT_ENTITY_LAYERS),
-      riskThreshold: 0,
+      likelihoodThreshold: 0,
+      severityThreshold: 0,
       activePreset: null,
       searchQuery: '',
       riskViewMode: 'residual',

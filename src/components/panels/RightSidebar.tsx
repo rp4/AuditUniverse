@@ -76,12 +76,25 @@ export function RightSidebar({ node, graphData, onClose, onNodeNavigate }: Right
   };
 
   return (
-    <div className="w-64 h-full bg-gray-900/95 border-l border-av-border/50 overflow-y-auto p-4 flex-shrink-0">
+    <div className="relative w-64 h-full metal-panel overflow-y-auto p-4 flex-shrink-0" style={{
+      borderLeft: '5px solid #4a4a4f',
+      borderLeftStyle: 'groove',
+      boxShadow: 'inset 3px 0 10px rgba(0,0,0,0.8), inset -3px 0 10px rgba(80,80,80,0.3), -5px 0 15px rgba(0,0,0,0.6)'
+    }}>
+      {/* Corner rivets (12px) */}
+      <div className="absolute top-2 left-2 w-[12px] h-[12px] rivet" />
+      <div className="absolute top-2 right-2 w-[12px] h-[12px] rivet" />
+      <div className="absolute bottom-2 left-2 w-[12px] h-[12px] rivet" />
+      <div className="absolute bottom-2 right-2 w-[12px] h-[12px] rivet" />
       {/* Header */}
       {node ? (
         <div className="mb-4">
           <div className="flex items-start justify-between mb-2">
-            <h3 className="text-av-primary font-bold text-base">{node.name}</h3>
+            <h3 className="font-bold text-base" style={{
+              fontFamily: 'Orbitron, monospace',
+              color: '#00ffdd',
+              textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+            }}>{node.name}</h3>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-white transition-colors text-lg leading-none"
@@ -90,11 +103,18 @@ export function RightSidebar({ node, graphData, onClose, onNodeNavigate }: Right
               ✕
             </button>
           </div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">{node.type}</div>
+          <div className="text-sm uppercase tracking-wider" style={{
+            color: '#8ab4f8',
+            fontFamily: 'Orbitron, monospace'
+          }}>{node.type}</div>
         </div>
       ) : (
         <div className="mb-4">
-          <h3 className="text-av-primary font-bold text-base">Node Details</h3>
+          <h3 className="font-bold text-base" style={{
+            fontFamily: 'Orbitron, monospace',
+            color: '#00ffdd',
+            textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+          }}>Node Details</h3>
           <div className="text-xs text-gray-500 mt-2">Select a node to view details</div>
         </div>
       )}
@@ -131,7 +151,12 @@ export function RightSidebar({ node, graphData, onClose, onNodeNavigate }: Right
 
       {/* Connected Entities */}
       <div className="border-t border-av-border/30 pt-4">
-        <h4 className="text-av-primary text-xs font-bold uppercase tracking-wider mb-3">
+        <h4 className="text-sm font-bold uppercase tracking-widest mb-3" style={{
+          fontFamily: 'Orbitron, monospace',
+          color: '#8ab4f8',
+          textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+          letterSpacing: '1.5px'
+        }}>
           Connected Entities
         </h4>
         {!node ? (
@@ -183,9 +208,20 @@ interface MetricBoxProps {
 
 function MetricBox({ label, value, color }: MetricBoxProps) {
   return (
-    <div className="bg-gray-800/40 border border-av-border/20 rounded p-2">
+    <div className="relative panel-outset p-2">
+      {/* Corner rivets (4px) */}
+      <div className="absolute top-0.5 left-0.5 w-[4px] h-[4px] rivet" />
+      <div className="absolute top-0.5 right-0.5 w-[4px] h-[4px] rivet" />
+      <div className="absolute bottom-0.5 left-0.5 w-[4px] h-[4px] rivet" />
+      <div className="absolute bottom-0.5 right-0.5 w-[4px] h-[4px] rivet" />
+
       <div className="text-[10px] text-gray-500 mb-1">{label}</div>
-      <div className={`text-2xl font-bold ${color}`}>
+      <div className="text-2xl font-bold" style={{
+        fontFamily: 'Orbitron, monospace',
+        color: '#00ffdd',
+        textShadow: '0 1px 3px rgba(0,0,0,0.5)',
+        letterSpacing: '0.5px'
+      }}>
         {value}
       </div>
     </div>

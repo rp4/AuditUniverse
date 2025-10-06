@@ -8,9 +8,14 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      'three/webgpu': path.resolve(__dirname, './src/lib/three-webgpu-stub.ts'),
     },
+    dedupe: ['three', 'react', 'react-dom'],
   },
   server: {
     port: 5173,
+  },
+  optimizeDeps: {
+    exclude: ['three/webgpu'],
   },
 })

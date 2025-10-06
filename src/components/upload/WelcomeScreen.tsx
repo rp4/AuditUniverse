@@ -6,15 +6,15 @@
 
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { useFileUpload } from '@/hooks/useFileUpload';
-import type { GraphData } from '@/types';
+import type { TemporalDataset } from '@/types';
 
 interface WelcomeScreenProps {
-  onDataLoaded: (data: GraphData) => void;
+  onDataLoaded: (data: TemporalDataset) => void;
 }
 
 export function WelcomeScreen({ onDataLoaded }: WelcomeScreenProps) {
   const {
-    data,
+    temporalData,
     isLoading,
     error,
     uploadFile,
@@ -29,13 +29,13 @@ export function WelcomeScreen({ onDataLoaded }: WelcomeScreenProps) {
 
   // Call onDataLoaded when data is successfully loaded
   useEffect(() => {
-    if (data && !error) {
+    if (temporalData && !error) {
       setIsExiting(true);
       setTimeout(() => {
-        onDataLoaded(data);
+        onDataLoaded(temporalData);
       }, 300);
     }
-  }, [data, error, onDataLoaded]);
+  }, [temporalData, error, onDataLoaded]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();

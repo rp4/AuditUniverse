@@ -321,7 +321,6 @@ export function ForceGraph3DComponent({
         nodeLabel={nodeLabel}
         linkColor={linkColor as any}
         linkWidth={linkWidth as any}
-        linkOpacity={linkOpacity as any}
         linkDirectionalParticles={2}
         linkDirectionalParticleWidth={linkDirectionalParticleWidth as any}
         linkDirectionalParticleSpeed={0.005}

@@ -123,6 +123,36 @@ export function ForceGraph3DComponent({
     }
   }, []);
 
+  // Recenter camera when selection changes
+  useEffect(() => {
+    if (!graphRef.current) return;
+
+    const graph = graphRef.current;
+
+    if (selectedNodeId) {
+      // Find the selected node in the data
+      const selectedNode = nodeMap.get(selectedNodeId);
+      if (selectedNode && selectedNode.x !== undefined && selectedNode.y !== undefined && selectedNode.z !== undefined) {
+        // Calculate camera distance based on whether we're zooming to a node
+        const distance = 300; // Distance from the node
+
+        // Smoothly move camera to focus on the selected node
+        graph.cameraPosition(
+          { x: selectedNode.x, y: selectedNode.y, z: selectedNode.z + distance }, // new position
+          selectedNode, // lookAt target
+          1000 // transition duration in ms
+        );
+      }
+    } else {
+      // No selection - recenter to origin
+      graph.cameraPosition(
+        { x: 0, y: 0, z: 1000 }, // return to initial position
+        { x: 0, y: 0, z: 0 }, // look at origin
+        1000 // transition duration in ms
+      );
+    }
+  }, [selectedNodeId, nodeMap]);
+
   // Update node materials when selection changes
   useEffect(() => {
     if (!graphRef.current) return;
@@ -321,6 +351,7 @@ export function ForceGraph3DComponent({
         nodeLabel={nodeLabel}
         linkColor={linkColor as any}
         linkWidth={linkWidth as any}
+        linkOpacity={linkOpacity as any}
         linkDirectionalParticles={2}
         linkDirectionalParticleWidth={linkDirectionalParticleWidth as any}
         linkDirectionalParticleSpeed={0.005}

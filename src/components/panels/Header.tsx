@@ -22,7 +22,7 @@ interface FilterOption {
   label: string;
 }
 
-export function Header({ rawData }: HeaderProps) {
+export function Header({ rawData, filteredData }: HeaderProps) {
   const {
     selectedAudits,
     addSelectedAudit,
@@ -80,12 +80,12 @@ export function Header({ rawData }: HeaderProps) {
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [rawData]);
 
-  // Calculate stats
-  const totalAudits = rawData.nodes.filter(n => n.type === 'audit').length;
-  const totalRisks = rawData.nodes.filter(n => n.type === 'risk').length;
+  // Calculate stats based on FILTERED data
+  const totalAudits = filteredData.nodes.filter(n => n.type === 'audit').length;
+  const totalRisks = filteredData.nodes.filter(n => n.type === 'risk').length;
 
   const auditedRiskIds = new Set<string>();
-  rawData.links.forEach(link => {
+  filteredData.links.forEach(link => {
     if (link.type === 'assessed_by') {
       const targetId = typeof link.target === 'string' ? link.target : (link.target as any).id;
       auditedRiskIds.add(targetId);

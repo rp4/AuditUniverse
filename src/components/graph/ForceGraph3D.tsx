@@ -190,14 +190,6 @@ export function ForceGraph3DComponent({
       }
     });
 
-    // Debug sprite count only
-    let spriteCount = 0;
-    scene.traverse((obj: any) => {
-      if (obj.isSprite) {
-        spriteCount++;
-      }
-    });
-    console.log('🏷️ Label Debug - Found sprites:', spriteCount);
   }, [selectedNodeId, computedHighlightedIds, highlightedNodeIds]);
 
   // Handle node clicks
@@ -242,12 +234,6 @@ export function ForceGraph3DComponent({
           label.position.set(0, size + 20, 0); // Position above node
 
           group.add(label);
-          console.log('🏷️ Added label:', {
-            name: n.name,
-            position: label.position,
-            textHeight: label.textHeight,
-            visible: label.visible
-          });
         }
 
         // Store node data on group
@@ -318,6 +304,12 @@ export function ForceGraph3DComponent({
     return 0; // No particles for unconnected links when selection active
   };
 
+  // Don't show node labels - handled by nodeThreeObject for risk nodes
+  const nodeLabel = () => {
+    return '';
+  };
+
+
   return (
     <div ref={containerRef} className="w-full h-full">
       <ForceGraph3D
@@ -326,6 +318,7 @@ export function ForceGraph3DComponent({
         width={dimensions.width}
         height={dimensions.height}
         nodeThreeObject={nodeThreeObject}
+        nodeLabel={nodeLabel}
         linkColor={linkColor as any}
         linkWidth={linkWidth as any}
         linkOpacity={linkOpacity as any}

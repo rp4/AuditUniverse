@@ -37,7 +37,7 @@ export function GraphLegend({ className = '' }: GraphLegendProps) {
 
   // Entity shapes with labels
   const entityShapes = [
-    { type: 'risk', label: 'Risk', shape: 'sphere', color: '#ff0044' },
+    { type: 'risk', label: 'Risk', shape: 'sphere', color: '#ff0000' },
     { type: 'control', label: 'Control', shape: 'cube', color: ENTITY_COLORS.control },
     { type: 'audit', label: 'Audit', shape: 'octahedron', color: ENTITY_COLORS.audit },
     { type: 'issue', label: 'Issue', shape: 'cone', color: ENTITY_COLORS.issue },

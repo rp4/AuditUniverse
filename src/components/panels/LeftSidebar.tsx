@@ -26,7 +26,7 @@ const ENTITY_TYPE_LABELS: Record<NodeType, string> = {
 };
 
 const ENTITY_TYPE_COLORS: Record<NodeType, string> = {
-  risk: 'bg-pink-500',
+  risk: 'bg-red-500',
   control: 'bg-cyan-500',
   audit: 'bg-orange-500',
   issue: 'bg-yellow-500',

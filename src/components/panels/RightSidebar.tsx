@@ -81,11 +81,6 @@ export function RightSidebar({ node, graphData, onClose, onNodeNavigate }: Right
       borderLeftStyle: 'groove',
       boxShadow: 'inset 3px 0 10px rgba(0,0,0,0.8), inset -3px 0 10px rgba(80,80,80,0.3), -5px 0 15px rgba(0,0,0,0.6)'
     }}>
-      {/* Corner rivets (12px) */}
-      <div className="absolute top-2 left-2 w-[12px] h-[12px] rivet" />
-      <div className="absolute top-2 right-2 w-[12px] h-[12px] rivet" />
-      <div className="absolute bottom-2 left-2 w-[12px] h-[12px] rivet" />
-      <div className="absolute bottom-2 right-2 w-[12px] h-[12px] rivet" />
       {/* Header */}
       {node ? (
         <div className="mb-4">

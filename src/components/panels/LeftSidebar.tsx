@@ -55,12 +55,6 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
       borderRightStyle: 'groove',
       boxShadow: 'inset -3px 0 10px rgba(0,0,0,0.8), inset 3px 0 10px rgba(80,80,80,0.3), 5px 0 15px rgba(0,0,0,0.6)'
     }}>
-      {/* Corner rivets (12px) */}
-      <div className="absolute top-2 left-2 w-[12px] h-[12px] rivet" />
-      <div className="absolute top-2 right-2 w-[12px] h-[12px] rivet" />
-      <div className="absolute bottom-2 left-2 w-[12px] h-[12px] rivet" />
-      <div className="absolute bottom-2 right-2 w-[12px] h-[12px] rivet" />
-
       {/* Vertical label on left edge */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full -rotate-90 origin-right text-[10px] uppercase tracking-widest font-bold pr-2" style={{
         fontFamily: 'Orbitron, monospace',
@@ -103,16 +97,12 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
             <div
               className={`absolute top-0.5 w-5 h-4 transition-all duration-300`}
               style={{
-                background: riskViewMode === 'residual' ? '#00ffcc' : '#5a5a5f',
-                backgroundImage: riskViewMode === 'residual'
-                  ? 'radial-gradient(circle at 30% 30%, #00ffcc, #00aa99)'
-                  : 'radial-gradient(circle at 30% 30%, #7a7a7f, #3a3a3f)',
+                background: '#5a5a5f',
+                backgroundImage: 'radial-gradient(circle at 30% 30%, #7a7a7f, #3a3a3f)',
                 border: '2px solid #4a4a4f',
                 borderStyle: 'outset',
                 borderRadius: '2px',
-                boxShadow: riskViewMode === 'residual'
-                  ? '1px 1px 2px rgba(0,0,0,0.5), 0 0 6px rgba(0,255,204,0.6)'
-                  : '1px 1px 2px rgba(0,0,0,0.5), inset -1px -1px 1px rgba(0,0,0,0.3)',
+                boxShadow: '1px 1px 2px rgba(0,0,0,0.5), inset -1px -1px 1px rgba(0,0,0,0.3)',
                 transform: riskViewMode === 'residual' ? 'translateX(24px)' : 'translateX(2px)'
               }}
             />
@@ -192,6 +182,27 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
               textShadow: '0 1px 2px rgba(0,0,0,0.5)'
             }}>{likelihoodThreshold}</span>
           </div>
+          {/* Color gradient visual indicator */}
+          <div className="flex items-center gap-0.5 mb-2">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(value => {
+              // Using the same color scale as getNodeColor in nodeShapes.ts
+              // Light red (low likelihood) to dark red (high likelihood)
+              const normalizedLikelihood = (value - 1) / 9; // 0 to 1
+              const r = Math.round(255 - (normalizedLikelihood * 102)); // 255 -> 153
+              const g = Math.round(204 - (normalizedLikelihood * 204)); // 204 -> 0
+              const b = Math.round(221 - (normalizedLikelihood * 221)); // 221 -> 0
+              const color = `rgb(${r}, ${g}, ${b})`;
+
+              return (
+                <div
+                  key={value}
+                  className="flex-1 h-3 rounded-sm border border-gray-800/50"
+                  style={{ backgroundColor: color }}
+                  title={`Likelihood ${value}`}
+                />
+              );
+            })}
+          </div>
           <input
             type="range"
             min="0"
@@ -223,6 +234,28 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
               color: '#00ffdd',
               textShadow: '0 1px 2px rgba(0,0,0,0.5)'
             }}>{severityThreshold}</span>
+          </div>
+          {/* Node size visual indicator */}
+          <div className="flex items-center justify-between mb-2 px-2">
+            {[0, 2, 4, 6, 8, 10].map(value => {
+              // Using the same size scale as getSeveritySize (exponential: 3 + severity^1.5)
+              const baseSize = 3 + Math.pow(value, 1.5);
+              // Scale down for display (actual sizes range from 3 to ~34)
+              const displaySize = Math.max(4, Math.min(20, baseSize * 0.6));
+
+              return (
+                <div
+                  key={value}
+                  className="rounded-full bg-cyan-500 border border-cyan-300"
+                  style={{
+                    width: `${displaySize}px`,
+                    height: `${displaySize}px`,
+                    boxShadow: '0 0 4px rgba(0, 255, 204, 0.4)'
+                  }}
+                  title={`Severity ${value}`}
+                />
+              );
+            })}
           </div>
           <input
             type="range"

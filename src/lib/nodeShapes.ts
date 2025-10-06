@@ -9,6 +9,7 @@
  */
 
 import * as THREE from 'three';
+import SpriteText from 'three-spritetext';
 import { getConfidenceOpacity } from './visualEncoding';
 import type { Node } from '@/types';
 
@@ -91,6 +92,27 @@ function getNodeSize(node: Node, riskViewMode: 'residual' | 'inherent' = 'residu
 
 
 /**
+ * Create a text sprite for node labels using three-spritetext
+ */
+function createTextSprite(text: string, size: number): SpriteText {
+  const sprite = new SpriteText(text);
+
+  // Configure appearance - make text much larger and more visible
+  sprite.color = '#00ffcc'; // Cyan color matching theme
+  sprite.textHeight = 8; // Fixed text height for consistent label size
+  sprite.backgroundColor = 'rgba(0, 0, 0, 0.8)'; // Dark background for readability
+  sprite.padding = 4;
+  sprite.borderRadius = 4;
+  sprite.fontFace = 'Arial, sans-serif';
+  sprite.fontWeight = 'bold';
+
+  // Position label above the node - increased distance
+  sprite.position.y = size + 15;
+
+  return sprite;
+}
+
+/**
  * Create Three.js mesh for a node
  *
  * Applies visual encoding:
@@ -98,6 +120,7 @@ function getNodeSize(node: Node, riskViewMode: 'residual' | 'inherent' = 'residu
  * - Color: Light red to dark red based on likelihood (risks), entity-specific for others
  * - Size: Based on severity with dramatic scaling (risks), fixed for others
  * - Opacity: Always 1.0 for risks, confidence/age-based for others
+ * - Label: Text sprite for Risk nodes
  */
 export function createNodeShape(
   node: Node,

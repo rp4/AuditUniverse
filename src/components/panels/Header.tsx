@@ -100,12 +100,6 @@ export function Header({ rawData }: HeaderProps) {
       borderBottomStyle: 'groove',
       boxShadow: 'inset 0 -3px 10px rgba(0,0,0,0.8), inset 0 3px 10px rgba(80,80,80,0.3), 0 5px 15px rgba(0,0,0,0.6)'
     }}>
-      {/* Corner rivets (15px) */}
-      <div className="absolute top-2 left-2 w-[15px] h-[15px] rivet" />
-      <div className="absolute top-2 right-2 w-[15px] h-[15px] rivet" />
-      <div className="absolute bottom-2 left-2 w-[15px] h-[15px] rivet" />
-      <div className="absolute bottom-2 right-2 w-[15px] h-[15px] rivet" />
-
       <div className="flex items-center justify-between gap-4">
         {/* Left: Preset Views Dropdown */}
         <div className="w-56">

@@ -43,12 +43,6 @@ export function Footer({ hasTemporalData, onExportClick }: FooterProps) {
       borderTopStyle: 'groove',
       boxShadow: 'inset 0 3px 10px rgba(0,0,0,0.8), inset 0 -3px 10px rgba(80,80,80,0.3), 0 -5px 15px rgba(0,0,0,0.6)'
     }}>
-      {/* Corner rivets (15px) */}
-      <div className="absolute top-2 left-2 w-[15px] h-[15px] rivet" />
-      <div className="absolute top-2 right-2 w-[15px] h-[15px] rivet" />
-      <div className="absolute bottom-2 left-2 w-[15px] h-[15px] rivet" />
-      <div className="absolute bottom-2 right-2 w-[15px] h-[15px] rivet" />
-
       {/* Bottom label */}
       <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-full text-[10px] uppercase tracking-widest font-bold mt-1" style={{
         fontFamily: 'Orbitron, monospace',

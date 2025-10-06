@@ -5,11 +5,19 @@
  * Uses react-force-graph-3d and applies our visual encoding system.
  */
 
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 import ForceGraph3D from 'react-force-graph-3d';
+import * as THREE from 'three';
+import SpriteText from 'three-spritetext';
 import { createNodeShape, getLinkColor, getLinkWidth, getLinkOpacity } from '@/lib/nodeShapes';
 import { useGraphStore } from '@/store/graphStore';
 import type { GraphData, Node, Link } from '@/types';
+
+// Make THREE and SpriteText available globally for the component
+if (typeof window !== 'undefined') {
+  (window as any).THREE = THREE;
+  (window as any).SpriteText = SpriteText;
+}
 
 interface ForceGraph3DProps {
   data: GraphData;
@@ -27,7 +35,9 @@ export function ForceGraph3DComponent({
   highlightedNodeIds = new Set()
 }: ForceGraph3DProps) {
   const graphRef = useRef<any>();
+  const containerRef = useRef<HTMLDivElement>(null);
   const riskViewMode = useGraphStore(state => state.riskViewMode);
+  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
   // Build node ID to node map for quick lookups
   const nodeMap = useMemo(() => {
@@ -68,6 +78,33 @@ export function ForceGraph3DComponent({
     return highlighted;
   }, [selectedNodeId, linkMap]);
 
+  // Track container dimensions for responsive sizing
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const { width, height } = containerRef.current.getBoundingClientRect();
+        setDimensions({ width, height });
+      }
+    };
+
+    // Initial measurement
+    updateDimensions();
+
+    // Use ResizeObserver for efficient resize tracking
+    const resizeObserver = new ResizeObserver(updateDimensions);
+    resizeObserver.observe(containerRef.current);
+
+    // Fallback to window resize event
+    window.addEventListener('resize', updateDimensions);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, []);
+
   // Configure camera on mount
   useEffect(() => {
     if (graphRef.current) {
@@ -97,18 +134,6 @@ export function ForceGraph3DComponent({
     const activeHighlights = highlightedNodeIds.size > 0 ? highlightedNodeIds : computedHighlightedIds;
     const hasSelection = activeHighlights.size > 0;
 
-    console.log('🔍 Selection Debug:', {
-      selectedNodeId,
-      highlightedCount: activeHighlights.size,
-      hasSelection,
-      highlightedIds: Array.from(activeHighlights)
-    });
-
-    let selectedCount = 0;
-    let highlightedCount = 0;
-    let dimmedCount = 0;
-    let normalCount = 0;
-
     // Find and update all node meshes in the scene
     scene.traverse((obj: any) => {
       if (obj.isMesh && obj.__nodeData) {
@@ -123,14 +148,11 @@ export function ForceGraph3DComponent({
           material.opacity = 1.0;
           material.transparent = false;
           obj.scale.setScalar(1.3);
-          selectedCount++;
-          console.log('✨ Selected node:', node.id, node.name, 'opacity:', material.opacity);
         } else if (isHighlighted) {
           material.emissiveIntensity = 0.5;
           material.opacity = 1.0;
           material.transparent = false;
           obj.scale.setScalar(1.15);
-          highlightedCount++;
         } else if (hasSelection) {
           // Dim non-highlighted nodes when there's a selection
           material.emissiveIntensity = 0.1;
@@ -138,28 +160,44 @@ export function ForceGraph3DComponent({
           material.transparent = true;
           material.needsUpdate = true;
           obj.scale.setScalar(1.0);
-          dimmedCount++;
-          if (dimmedCount === 1) {
-            console.log('🌑 First dimmed node:', node.id, 'opacity:', material.opacity, 'transparent:', material.transparent);
-          }
         } else {
           // No selection - normal state
           material.emissiveIntensity = 0.2;
           material.opacity = 1.0;
           material.transparent = false;
           obj.scale.setScalar(1.0);
-          normalCount++;
+        }
+      }
+      // Also handle labels for Risk nodes (SpriteText as children of groups)
+      if (obj.isSprite && obj.parent && (obj.parent.isGroup || obj.parent.isMesh)) {
+        // Check if parent group or grandparent has node data
+        const parentData = obj.parent.__nodeData;
+        if (parentData) {
+          const node = parentData as Node;
+          const isSelected = selectedNodeId === node.id;
+          const isHighlighted = activeHighlights.has(node.id);
+
+          // Adjust label opacity based on selection state
+          if (obj.material) {
+            if (hasSelection && !isSelected && !isHighlighted) {
+              obj.material.opacity = 0.25;
+            } else {
+              obj.material.opacity = 1.0;
+            }
+            obj.material.needsUpdate = true;
+          }
         }
       }
     });
 
-    console.log('📊 Node counts:', {
-      selected: selectedCount,
-      highlighted: highlightedCount,
-      dimmed: dimmedCount,
-      normal: normalCount,
-      total: selectedCount + highlightedCount + dimmedCount + normalCount
+    // Debug sprite count only
+    let spriteCount = 0;
+    scene.traverse((obj: any) => {
+      if (obj.isSprite) {
+        spriteCount++;
+      }
     });
+    console.log('🏷️ Label Debug - Found sprites:', spriteCount);
   }, [selectedNodeId, computedHighlightedIds, highlightedNodeIds]);
 
   // Handle node clicks
@@ -181,8 +219,43 @@ export function ForceGraph3DComponent({
   const nodeThreeObject = useMemo(() => {
     return (node: any) => {
       const n = node as Node;
-      // Always create with default state - we'll update via useEffect
-      return createNodeShape(n, false, false, riskViewMode);
+      const nodeObj = createNodeShape(n, false, false, riskViewMode);
+
+      // For Risk nodes, wrap in a group and add label
+      if (n.type === 'risk') {
+        const group = new (window as any).THREE.Group();
+        group.add(nodeObj);
+
+        // Import SpriteText dynamically
+        const SpriteText = (window as any).SpriteText;
+        if (SpriteText) {
+          const label = new SpriteText(n.name);
+          label.color = '#00ffcc';
+          label.textHeight = 15; // Much larger text
+          label.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+          label.padding = 6;
+          label.borderRadius = 5;
+          label.fontFace = 'Arial, sans-serif';
+          label.fontWeight = 'bold';
+
+          const size = (nodeObj as any).geometry?.parameters?.radius || 10;
+          label.position.set(0, size + 20, 0); // Position above node
+
+          group.add(label);
+          console.log('🏷️ Added label:', {
+            name: n.name,
+            position: label.position,
+            textHeight: label.textHeight,
+            visible: label.visible
+          });
+        }
+
+        // Store node data on group
+        (group as any).__nodeData = n;
+        return group;
+      }
+
+      return nodeObj;
     };
   }, [riskViewMode]); // Recreate when risk view mode changes
 
@@ -246,10 +319,12 @@ export function ForceGraph3DComponent({
   };
 
   return (
-    <div className="w-full h-full">
+    <div ref={containerRef} className="w-full h-full">
       <ForceGraph3D
         ref={graphRef}
         graphData={data}
+        width={dimensions.width}
+        height={dimensions.height}
         nodeThreeObject={nodeThreeObject}
         linkColor={linkColor as any}
         linkWidth={linkWidth as any}

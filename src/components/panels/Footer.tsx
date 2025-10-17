@@ -71,20 +71,20 @@ export function Footer({ hasTemporalData, onExportClick }: FooterProps) {
             onClick={isPlaying ? pause : play}
             className="p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              background: '#00ffcc',
-              border: '3px solid #00aa99',
+              background: 'linear-gradient(135deg, #4a4a4f 0%, #3a3a3f 100%)',
+              border: '3px solid #5a5a5f',
               borderStyle: 'outset',
-              boxShadow: '3px 3px 6px rgba(0,0,0,0.6), -1px -1px 3px rgba(80,80,80,0.3), 0 0 8px rgba(0,255,204,0.4)'
+              boxShadow: '3px 3px 6px rgba(0,0,0,0.6), -1px -1px 3px rgba(80,80,80,0.3)'
             }}
             title={isPlaying ? 'Pause' : 'Play'}
             disabled={!hasTemporalData}
           >
             {isPlaying ? (
-              <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
             ) : (
-              <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
               </svg>
             )}
@@ -153,11 +153,11 @@ export function Footer({ hasTemporalData, onExportClick }: FooterProps) {
                 speed === s ? '' : 'btn-outset'
               }`}
               style={speed === s ? {
-                background: '#00ffcc',
-                border: '3px solid #00aa99',
+                background: 'linear-gradient(135deg, #5a5a5f 0%, #4a4a4f 100%)',
+                border: '3px solid #3a3a3f',
                 borderStyle: 'inset',
-                boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.6), inset -1px -1px 2px rgba(80,80,80,0.3), 0 0 6px rgba(0,255,204,0.6)',
-                color: '#000',
+                boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.6), inset -1px -1px 2px rgba(80,80,80,0.3)',
+                color: '#00ffdd',
                 fontWeight: 'bold',
                 fontFamily: 'Orbitron, monospace'
               } : {

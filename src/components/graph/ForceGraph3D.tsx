@@ -37,6 +37,7 @@ export function ForceGraph3DComponent({
   const graphRef = useRef<any>();
   const containerRef = useRef<HTMLDivElement>(null);
   const riskViewMode = useGraphStore(state => state.riskViewMode);
+  const showRiskLabels = useGraphStore(state => state.showRiskLabels);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
   // Build node ID to node map for quick lookups
@@ -243,27 +244,30 @@ export function ForceGraph3DComponent({
       const n = node as Node;
       const nodeObj = createNodeShape(n, false, false, riskViewMode);
 
-      // For Risk nodes, wrap in a group and add label
+      // For Risk nodes, wrap in a group and add label (if enabled)
       if (n.type === 'risk') {
         const group = new (window as any).THREE.Group();
         group.add(nodeObj);
 
-        // Import SpriteText dynamically
-        const SpriteText = (window as any).SpriteText;
-        if (SpriteText) {
-          const label = new SpriteText(n.name);
-          label.color = '#00ffcc';
-          label.textHeight = 15; // Much larger text
-          label.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-          label.padding = 6;
-          label.borderRadius = 5;
-          label.fontFace = 'Arial, sans-serif';
-          label.fontWeight = 'bold';
+        // Add label only if showRiskLabels is true
+        if (showRiskLabels) {
+          // Import SpriteText dynamically
+          const SpriteText = (window as any).SpriteText;
+          if (SpriteText) {
+            const label = new SpriteText(n.name);
+            label.color = '#00ffcc';
+            label.textHeight = 15; // Much larger text
+            label.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            label.padding = 6;
+            label.borderRadius = 5;
+            label.fontFace = 'Arial, sans-serif';
+            label.fontWeight = 'bold';
 
-          const size = (nodeObj as any).geometry?.parameters?.radius || 10;
-          label.position.set(0, size + 20, 0); // Position above node
+            const size = (nodeObj as any).geometry?.parameters?.radius || 10;
+            label.position.set(0, size + 20, 0); // Position above node
 
-          group.add(label);
+            group.add(label);
+          }
         }
 
         // Store node data on group
@@ -273,7 +277,7 @@ export function ForceGraph3DComponent({
 
       return nodeObj;
     };
-  }, [riskViewMode]); // Recreate when risk view mode changes
+  }, [riskViewMode, showRiskLabels]); // Recreate when risk view mode or label visibility changes
 
   // Get link color based on relationship type and selection state
   const linkColor = (link: any) => {

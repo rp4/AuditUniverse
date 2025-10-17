@@ -38,6 +38,9 @@ export interface FilterSlice {
   // Link strength filter
   linkStrength: number;
 
+  // Show risk labels toggle
+  showRiskLabels: boolean;
+
   // Actions
   setSelectedAudits: (audits: Set<string>) => void;
   addSelectedAudit: (auditId: string) => void;
@@ -75,6 +78,8 @@ export interface FilterSlice {
 
   setLinkStrength: (strength: number) => void;
 
+  setShowRiskLabels: (show: boolean) => void;
+
   resetFilters: () => void;
 }
 
@@ -101,6 +106,7 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
   searchQuery: '',
   riskViewMode: 'residual',
   linkStrength: 0.5,
+  showRiskLabels: true,
 
   // Audit actions
   setSelectedAudits: (audits) => set({ selectedAudits: audits }),
@@ -190,6 +196,9 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
   // Link strength action
   setLinkStrength: (strength) => set({ linkStrength: strength }),
 
+  // Show risk labels action
+  setShowRiskLabels: (show) => set({ showRiskLabels: show }),
+
   // Reset all filters
   resetFilters: () =>
     set({
@@ -203,6 +212,7 @@ export const createFilterSlice: StateCreator<FilterSlice> = (set) => ({
       activePreset: null,
       searchQuery: '',
       riskViewMode: 'residual',
-      linkStrength: 0.5
+      linkStrength: 0.5,
+      showRiskLabels: true
     })
 });

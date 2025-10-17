@@ -193,7 +193,7 @@ function MultiSelectDropdown({ title, options, selectedIds, onToggle }: MultiSel
   const [searchQuery, setSearchQuery] = useState('');
 
   const displayText = selectedIds.size === 0
-    ? 'All selected'
+    ? 'None selected'
     : selectedIds.size === options.length
     ? 'All selected'
     : `${selectedIds.size} selected`;

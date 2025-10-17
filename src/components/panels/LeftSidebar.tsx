@@ -39,6 +39,8 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
   const {
     riskViewMode,
     setRiskViewMode,
+    showRiskLabels,
+    setShowRiskLabels,
     activeEntityLayers,
     toggleEntityLayer,
     likelihoodThreshold,
@@ -80,36 +82,72 @@ export function LeftSidebar({ rawData }: LeftSidebarProps) {
         }}>
           Risk View Mode
         </h3>
-        <div className="flex items-center space-x-2">
-          {/* Industrial Toggle Track */}
-          <div
-            className="relative w-12 h-6 cursor-pointer transition-all"
-            onClick={() => setRiskViewMode(riskViewMode === 'residual' ? 'inherent' : 'residual')}
-            style={{
-              background: '#1a1a1f',
-              border: '2px solid #3a3a3f',
-              borderStyle: 'inset',
-              borderRadius: '3px',
-              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)'
-            }}
-          >
-            {/* Industrial Sliding Thumb */}
+        <div className="space-y-3">
+          {/* Risk Type Toggle */}
+          <div className="flex items-center space-x-2">
+            {/* Industrial Toggle Track */}
             <div
-              className={`absolute top-0.5 w-5 h-4 transition-all duration-300`}
+              className="relative w-12 h-6 cursor-pointer transition-all"
+              onClick={() => setRiskViewMode(riskViewMode === 'residual' ? 'inherent' : 'residual')}
               style={{
-                background: '#5a5a5f',
-                backgroundImage: 'radial-gradient(circle at 30% 30%, #7a7a7f, #3a3a3f)',
-                border: '2px solid #4a4a4f',
-                borderStyle: 'outset',
-                borderRadius: '2px',
-                boxShadow: '1px 1px 2px rgba(0,0,0,0.5), inset -1px -1px 1px rgba(0,0,0,0.3)',
-                transform: riskViewMode === 'residual' ? 'translateX(24px)' : 'translateX(2px)'
+                background: '#1a1a1f',
+                border: '2px solid #3a3a3f',
+                borderStyle: 'inset',
+                borderRadius: '3px',
+                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)'
               }}
-            />
+            >
+              {/* Industrial Sliding Thumb */}
+              <div
+                className={`absolute top-0.5 w-5 h-4 transition-all duration-300`}
+                style={{
+                  background: '#5a5a5f',
+                  backgroundImage: 'radial-gradient(circle at 30% 30%, #7a7a7f, #3a3a3f)',
+                  border: '2px solid #4a4a4f',
+                  borderStyle: 'outset',
+                  borderRadius: '2px',
+                  boxShadow: '1px 1px 2px rgba(0,0,0,0.5), inset -1px -1px 1px rgba(0,0,0,0.3)',
+                  transform: riskViewMode === 'residual' ? 'translateX(24px)' : 'translateX(2px)'
+                }}
+              />
+            </div>
+            <span className="text-xs text-gray-300">
+              {riskViewMode === 'residual' ? 'Residual Risk' : 'Inherent Risk'}
+            </span>
           </div>
-          <span className="text-xs text-gray-300">
-            {riskViewMode === 'residual' ? 'Residual Risk' : 'Inherent Risk'}
-          </span>
+
+          {/* Show Labels Toggle */}
+          <div className="flex items-center space-x-2">
+            {/* Industrial Toggle Track */}
+            <div
+              className="relative w-12 h-6 cursor-pointer transition-all"
+              onClick={() => setShowRiskLabels(!showRiskLabels)}
+              style={{
+                background: '#1a1a1f',
+                border: '2px solid #3a3a3f',
+                borderStyle: 'inset',
+                borderRadius: '3px',
+                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)'
+              }}
+            >
+              {/* Industrial Sliding Thumb */}
+              <div
+                className={`absolute top-0.5 w-5 h-4 transition-all duration-300`}
+                style={{
+                  background: '#5a5a5f',
+                  backgroundImage: 'radial-gradient(circle at 30% 30%, #7a7a7f, #3a3a3f)',
+                  border: '2px solid #4a4a4f',
+                  borderStyle: 'outset',
+                  borderRadius: '2px',
+                  boxShadow: '1px 1px 2px rgba(0,0,0,0.5), inset -1px -1px 1px rgba(0,0,0,0.3)',
+                  transform: showRiskLabels ? 'translateX(24px)' : 'translateX(2px)'
+                }}
+              />
+            </div>
+            <span className="text-xs text-gray-300">
+              {showRiskLabels ? 'Labels On' : 'Labels Off'}
+            </span>
+          </div>
         </div>
       </div>
 

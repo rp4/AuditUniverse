@@ -48,8 +48,12 @@ export function useFilters(rawData: GraphData): GraphData {
 
     // 3. Audit filter (risks assessed by selected audits)
     if (selectedAudits.size > 0) {
-      const auditedRiskIds = new Set<string>();
+      const connectedNodeIds = new Set<string>();
 
+      // Add selected audits
+      selectedAudits.forEach(id => connectedNodeIds.add(id));
+
+      // Find all nodes directly connected to selected audits
       links.forEach(link => {
         // Validate link structure
         if (!link || !link.source || !link.target) {
@@ -70,89 +74,67 @@ export function useFilters(rawData: GraphData): GraphData {
           return;
         }
 
-        if (link.type === 'assessed_by') {
-          // audit → risk
-          if (selectedAudits.has(sourceId)) {
-            auditedRiskIds.add(targetId);
-          }
+        // If source is a selected audit, add target
+        if (selectedAudits.has(sourceId)) {
+          connectedNodeIds.add(targetId);
+        }
+        // If target is a selected audit, add source
+        if (selectedAudits.has(targetId)) {
+          connectedNodeIds.add(sourceId);
         }
       });
 
-      nodes = nodes.filter(node => {
-        // Keep audits if they're selected
-        if (node.type === 'audit' && selectedAudits.has(node.id)) {
-          return true;
-        }
-        // Keep risks if they're audited by selected audits
-        if (node.type === 'risk' && auditedRiskIds.has(node.id)) {
-          return true;
-        }
-        // Keep non-risks/non-audits (controls, etc.) if connected to filtered risks
-        if (node.type !== 'risk' && node.type !== 'audit') {
-          return true; // Will be filtered by link connectivity later
-        }
-        return false;
-      });
+      nodes = nodes.filter(node => connectedNodeIds.has(node.id));
     }
 
     // 4. Business unit filter (risks owned by selected units)
     if (selectedUnits.size > 0) {
-      const ownedRiskIds = new Set<string>();
+      const connectedNodeIds = new Set<string>();
 
+      // Add selected units
+      selectedUnits.forEach(id => connectedNodeIds.add(id));
+
+      // Find all nodes directly connected to selected units
       links.forEach(link => {
         const sourceId = typeof link.source === 'string' ? link.source : (link.source as any).id;
         const targetId = typeof link.target === 'string' ? link.target : (link.target as any).id;
 
-        if (link.type === 'owned_by') {
-          // businessUnit → risk
-          if (selectedUnits.has(sourceId)) {
-            ownedRiskIds.add(targetId);
-          }
+        // If source is a selected unit, add target
+        if (selectedUnits.has(sourceId)) {
+          connectedNodeIds.add(targetId);
+        }
+        // If target is a selected unit, add source
+        if (selectedUnits.has(targetId)) {
+          connectedNodeIds.add(sourceId);
         }
       });
 
-      nodes = nodes.filter(node => {
-        if (node.type === 'businessUnit' && selectedUnits.has(node.id)) {
-          return true;
-        }
-        if (node.type === 'risk' && ownedRiskIds.has(node.id)) {
-          return true;
-        }
-        if (node.type !== 'risk' && node.type !== 'businessUnit') {
-          return true;
-        }
-        return false;
-      });
+      nodes = nodes.filter(node => connectedNodeIds.has(node.id));
     }
 
     // 5. Standard filter (risks requiring selected standards)
     if (selectedStandards.size > 0) {
-      const requiredRiskIds = new Set<string>();
+      const connectedNodeIds = new Set<string>();
 
+      // Add selected standards
+      selectedStandards.forEach(id => connectedNodeIds.add(id));
+
+      // Find all nodes directly connected to selected standards
       links.forEach(link => {
         const sourceId = typeof link.source === 'string' ? link.source : (link.source as any).id;
         const targetId = typeof link.target === 'string' ? link.target : (link.target as any).id;
 
-        if (link.type === 'requires') {
-          // standard → risk
-          if (selectedStandards.has(sourceId)) {
-            requiredRiskIds.add(targetId);
-          }
+        // If source is a selected standard, add target
+        if (selectedStandards.has(sourceId)) {
+          connectedNodeIds.add(targetId);
+        }
+        // If target is a selected standard, add source
+        if (selectedStandards.has(targetId)) {
+          connectedNodeIds.add(sourceId);
         }
       });
 
-      nodes = nodes.filter(node => {
-        if (node.type === 'standard' && selectedStandards.has(node.id)) {
-          return true;
-        }
-        if (node.type === 'risk' && requiredRiskIds.has(node.id)) {
-          return true;
-        }
-        if (node.type !== 'risk' && node.type !== 'standard') {
-          return true;
-        }
-        return false;
-      });
+      nodes = nodes.filter(node => connectedNodeIds.has(node.id));
     }
 
     // 6. Risk type filter (category match)
@@ -202,6 +184,20 @@ export function useFilters(rawData: GraphData): GraphData {
 
       return visibleNodeIds.has(sourceId) && visibleNodeIds.has(targetId);
     });
+
+    // 9. Remove orphaned nodes only if filters are active
+    // (Don't remove orphaned nodes if no filters are applied, as preset views may return nodes without links)
+    const anyFilterActive = selectedAudits.size > 0 || selectedUnits.size > 0 || selectedStandards.size > 0;
+    if (anyFilterActive) {
+      const connectedNodeIds = new Set<string>();
+      links.forEach(link => {
+        const sourceId = typeof link.source === 'string' ? link.source : (link.source as any)?.id;
+        const targetId = typeof link.target === 'string' ? link.target : (link.target as any)?.id;
+        if (sourceId) connectedNodeIds.add(sourceId);
+        if (targetId) connectedNodeIds.add(targetId);
+      });
+      nodes = nodes.filter(node => connectedNodeIds.has(node.id));
+    }
 
     return { nodes, links };
   }, [
